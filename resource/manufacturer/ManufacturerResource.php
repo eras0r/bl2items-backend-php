@@ -41,7 +41,6 @@ class ManufacturerResource extends AbstractManufacturerResource {
                 $manufacturer = $this->getEntityManager()->find('Manufacturer', $this->id);
 
                 $manufacturer->setName($m["name"]);
-                $manufacturer->setColor($m["color"]);
 
                 $this->getEntityManager()->persist($manufacturer);
                 $this->getEntityManager()->flush();
