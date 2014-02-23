@@ -3,7 +3,7 @@
 require_once 'AbstractEntity.php';
 
 /**
- * @Entity @Table(name="d_rarity", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"})})
+ * @Entity @Table(name="manufacturer", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"})})
  **/
 class Manufacturer extends AbstractEntity {
 
