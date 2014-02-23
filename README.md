@@ -9,7 +9,7 @@ Setup
 1. Make sure you have [composer](http://getcomposer.org/) installed.
 2. clone the repository 
 3. navigate the the directory where your clone is located
-4. type in ```composer install``` (assuming composer is installed globally)
+4. type in `composer install` (assuming composer is installed globally)
 
 Prepare database
 ----------------
