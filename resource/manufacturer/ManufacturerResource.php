@@ -2,6 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
+require_once "model/Manufacturer.php";
+
 use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
@@ -19,7 +21,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
      * @provides application/json
      */
     public function display() {
-        $manufacturer = $this->getEntityManager()->find('Manufacturer', $this->id);
+        $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
         return json_encode($manufacturer->getJson());
     }
 
@@ -38,21 +40,13 @@ class ManufacturerResource extends AbstractManufacturerResource {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         } else {
             try {
-                $manufacturer = $this->getEntityManager()->find('Manufacturer', $this->id);
-
+                $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
                 $manufacturer->setName($m["name"]);
 
                 $this->getEntityManager()->persist($manufacturer);
                 $this->getEntityManager()->flush();
             } catch (DBALException $e) {
-                if ($e->getPrevious()->getCode() === '23000') {
-                    $errors = array();
-                    if (\preg_match("%key 'unique_(?P<key>.+)'%", $e->getMessage(), $match)) {
-                        $constraintName = $match['key'];
-                        $errors[$constraintName] = "Already exists!";
-                    }
-                }
-                return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
+                return $this->handleUniqueKeyException($e);
             }
         }
 
@@ -66,7 +60,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
      */
     public
     function remove() {
-        $manufacturer = $this->getEntityManager()->find('Manufacturer', $this->id);
+        $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
         $this->getEntityManager()->remove($manufacturer);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);

@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/Rarity.php";
+require_once 'model/Rarity.php';
 
 use Tonic\Response;
 use Doctrine\DBAL\DBALException;
@@ -22,7 +22,7 @@ class RarityCollectionResource extends AbstractRarityResource {
      * @provides application/json
      */
     public function getAll() {
-        $rarityRepository = $this->getEntityManager()->getRepository('Rarity');
+        $rarityRepository = $this->getEntityManager()->getRepository(Rarity::getEntityName());
         $rarities = array();
 
         foreach ($rarityRepository->findBy(array(), array('sortOrder' => 'asc')) as $r) {
@@ -39,7 +39,7 @@ class RarityCollectionResource extends AbstractRarityResource {
      * @accepts application/json
      */
     public function add() {
-        // json decode to associaitive array
+        // json decode to associative array
         $r = json_decode($this->request->data, true);
         $errors = $this->validate($r);
         if (!empty($errors)) {

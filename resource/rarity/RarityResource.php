@@ -2,6 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
+require_once 'model/Rarity.php';
+
 use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
@@ -19,7 +21,7 @@ class RarityResource extends AbstractRarityResource {
      * @provides application/json
      */
     public function display() {
-        $rarity = $this->getEntityManager()->find('Rarity', $this->id);
+        $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
         return json_encode($rarity->getJson());
     }
 
@@ -38,8 +40,7 @@ class RarityResource extends AbstractRarityResource {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         } else {
             try {
-                $rarity = $this->getEntityManager()->find('Rarity', $this->id);
-
+                $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
                 $rarity->setName($r["name"]);
                 $rarity->setColor($r["color"]);
                 $rarity->setSortOrder($r["sortOrder"]);
@@ -47,14 +48,7 @@ class RarityResource extends AbstractRarityResource {
                 $this->getEntityManager()->persist($rarity);
                 $this->getEntityManager()->flush();
             } catch (DBALException $e) {
-                if ($e->getPrevious()->getCode() === '23000') {
-                    $errors = array();
-                    if (\preg_match("%key 'unique_(?P<key>.+)'%", $e->getMessage(), $match)) {
-                        $constraintName = $match['key'];
-                        $errors[$constraintName] = "Already exists!";
-                    }
-                }
-                return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
+                return $this->handleUniqueKeyException($e);
             }
         }
 
@@ -68,7 +62,7 @@ class RarityResource extends AbstractRarityResource {
      */
     public
     function remove() {
-        $rarity = $this->getEntityManager()->find('Rarity', $this->id);
+        $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
         $this->getEntityManager()->remove($rarity);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);

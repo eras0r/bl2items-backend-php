@@ -3,7 +3,7 @@
 require_once 'vendor/autoload.php';
 
 /**
- * Abstract super class for all resources based on the weapon enity.
+ * Abstract super class for all resources based on the weapon entity.
  */
 class AbstractWeaponResource extends AbstractResource {
 

@@ -3,13 +3,13 @@
 require_once 'vendor/autoload.php';
 
 /**
- * Abstract super class for all resources based on the rarity enity.
+ * Abstract super class for all resources based on the {@link Manufacturer} entity.
  */
 class AbstractManufacturerResource extends AbstractResource {
 
-    protected function validate($rarity) {
+    protected function validate($damageType) {
         $errors = array();
-        if (empty($rarity["name"])) {
+        if (empty($damageType["name"])) {
             $errors["name"] = "Name is required";
         }
         return $errors;

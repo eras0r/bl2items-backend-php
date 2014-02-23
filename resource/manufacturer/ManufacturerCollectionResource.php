@@ -22,7 +22,7 @@ class ManufacturerCollectionResource extends AbstractManufacturerResource {
      * @provides application/json
      */
     public function getAll() {
-        $manufacturerRepository = $this->getEntityManager()->getRepository('Manufacturer');
+        $manufacturerRepository = $this->getEntityManager()->getRepository(Manufacturer::getEntityName());
         $manufacturers = array();
 
         foreach ($manufacturerRepository->findBy(array(), array('name' => 'asc')) as $m) {

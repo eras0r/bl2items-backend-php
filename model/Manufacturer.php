@@ -19,19 +19,35 @@ class Manufacturer extends AbstractEntity {
      **/
     protected $name;
 
-    // constructor used for JSON
+
+    /**
+     * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
+     * @param array $data associative array holding the properties for the manufacturer.
+     */
     public function __construct(array $data) {
         parent::__construct($data);
     }
 
+    /**
+     * Gets the id.
+     * @return int the id
+     */
     public function getId() {
         return $this->id;
     }
 
+    /**
+     * Gets the name.
+     * @return string
+     */
     public function getName() {
         return $this->name;
     }
 
+    /**
+     * Sets the name.
+     * @param string $name the name to be set.
+     */
     public function setName($name) {
         $this->name = $name;
     }

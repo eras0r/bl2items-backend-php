@@ -3,9 +3,9 @@
 require_once 'AbstractEntity.php';
 
 /**
- * @Entity @Table(name="rarity", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"}), @UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
+ * @Entity @Table(name="damage_type", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"})})
  **/
-class Rarity extends AbstractEntity {
+class DamageType extends AbstractEntity {
 
     /**
      * @Id @Column(type="bigint") @GeneratedValue
@@ -20,20 +20,14 @@ class Rarity extends AbstractEntity {
     protected $name;
 
     /**
-     * @Column(type="string", length=7)
-     * @var string
-     **/
-    protected $color;
-
-    /**
      * @Column(type="integer")
      * @var int
      **/
     protected $sortOrder;
 
     /**
-     * Creates a new rarity by initializing is properties by using hte values given in the associative array.
-     * @param array $data associative array holding the properties for the rarity.
+     * Creates a new damage type by initializing is properties by using hte values given in the associative array.
+     * @param array $data associative array holding the properties for the damage type.
      */
     public function __construct(array $data) {
         parent::__construct($data);
@@ -64,23 +58,7 @@ class Rarity extends AbstractEntity {
     }
 
     /**
-     * Gets the color.
-     * @return string the color
-     */
-    public function getColor() {
-        return $this->color;
-    }
-
-    /**
-     * Sets the color.
-     * @param $color the color to be set
-     */
-    public function setColor($color) {
-        $this->color = $color;
-    }
-
-    /**
-     * Gets the sort order.
+     * Gets the sort order
      * @return int the sort order
      */
     public function getSortOrder() {
@@ -89,7 +67,7 @@ class Rarity extends AbstractEntity {
 
     /**
      * Sets the sort order.
-     * @param $sortOrder the sort order to be set.
+     * @param int $sortOrder the sort order to be set.
      */
     public function setSortOrder($sortOrder) {
         $this->sortOrder = $sortOrder;

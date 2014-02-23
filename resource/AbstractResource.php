@@ -15,7 +15,6 @@ require_once 'include/config.php';
 
 abstract class AbstractResource extends Resource {
 
-
     /**
      * HTTP status code used for validation errors
      */
