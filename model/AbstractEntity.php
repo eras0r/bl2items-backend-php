@@ -8,7 +8,6 @@ abstract class AbstractEntity {
     protected function __construct(array $data) {
         foreach ($data as $key => $val) {
             if (property_exists(get_class($this), $key) && $key != "id") {
-                echo "key = $key, val = $val<br />";
                 $this->$key = $val;
             }
         }

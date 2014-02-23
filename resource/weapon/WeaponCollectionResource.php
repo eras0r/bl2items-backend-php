@@ -57,7 +57,6 @@ class WeaponCollectionResource extends AbstractWeaponResource {
             if (!$link->error) {
                 return new Response(Response::CREATED);
             } else {
-                echo "error: " . $link->error;
                 return new Response(Response::BADREQUEST);
             }
         }

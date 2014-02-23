@@ -6,6 +6,7 @@ use Doctrine\DBAL\DBALException;
 
 use Tonic\Application;
 use Tonic\Resource;
+use Tonic\Response;
 use Tonic\Request;
 
 require_once 'vendor/autoload.php';
