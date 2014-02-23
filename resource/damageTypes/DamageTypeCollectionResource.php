@@ -8,7 +8,7 @@ use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
 /**
- * This class defines an example resource that is wired into the URI /example
+ * This class defines the resource for collections of the {@link DamageType} entity.
  * @uri /damageTypes
  * @uri /damageTypes/
  */
