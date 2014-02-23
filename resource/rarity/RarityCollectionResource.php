@@ -43,7 +43,7 @@ class RarityCollectionResource extends AbstractRarityResource {
         $r = json_decode($this->request->data, true);
         $errors = $this->validate($r);
         if (!empty($errors)) {
-            return new Response(Response::CONFLICT, json_encode($errors));
+            return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
         } else {
             try {
                 $rarity = new Rarity($r);

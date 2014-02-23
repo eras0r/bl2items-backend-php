@@ -15,6 +15,12 @@ require_once 'include/config.php';
 
 abstract class AbstractResource extends Resource {
 
+
+    /**
+     * HTTP status code used for validation errors
+     */
+    const UNPROCESSABLE_ENTITY = 422;
+
     private $entityManager;
 
     // constructor for resources do have to invoke parent constructor and must have exactly this signature
@@ -53,7 +59,7 @@ abstract class AbstractResource extends Resource {
                 $errors[$constraintName] = "Already exists!";
             }
         }
-        return new Response(Response::CONFLICT, json_encode($errors));
+        return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
     }
 
     /**

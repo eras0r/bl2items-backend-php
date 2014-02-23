@@ -52,7 +52,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
                         $errors[$constraintName] = "Already exists!";
                     }
                 }
-                return new Response(Response::CONFLICT, json_encode($errors));
+                return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
             }
         }
 
