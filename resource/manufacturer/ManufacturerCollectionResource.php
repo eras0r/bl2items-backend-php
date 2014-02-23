@@ -2,13 +2,12 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/Manufacturer.php";
-
 use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
 /**
- * This class defines an example resource that is wired into the URI /example
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on collections of the {@link Manufacturer} entity.
  * @uri /manufacturers
  * @uri /manufacturers/
  */
@@ -22,7 +21,7 @@ class ManufacturerCollectionResource extends AbstractManufacturerResource {
      * @provides application/json
      */
     public function getAll() {
-        $manufacturerRepository = $this->getEntityManager()->getRepository(Manufacturer::getEntityName());
+        $manufacturerRepository = $this->getEntityManager()->getRepository($this->getEnityName());
         $manufacturers = array();
 
         foreach ($manufacturerRepository->findBy(array(), array('name' => 'asc')) as $m) {

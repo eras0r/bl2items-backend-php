@@ -24,7 +24,7 @@ class DamageTypeResource extends AbstractDamageTypeResource {
      * @return string the JSON representation of the damage type
      */
     public function display() {
-        $damageType = $this->getEntityManager()->find(DamageType::getEntityName(), $this->id);
+        $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
         return json_encode($damageType->getJson());
     }
 
@@ -44,7 +44,7 @@ class DamageTypeResource extends AbstractDamageTypeResource {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         } else {
             try {
-                $damageType = $this->getEntityManager()->find(DamageType::getEntityName(), $this->id);
+                $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
                 $damageType->setName($dt["name"]);
                 $damageType->setSortOrder($dt["sortOrder"]);
 
@@ -65,7 +65,7 @@ class DamageTypeResource extends AbstractDamageTypeResource {
      * @return Tonic\Response
      */
     public function remove() {
-        $damageType = $this->getEntityManager()->find(DamageType::getEntityName(), $this->id);
+        $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
         $this->getEntityManager()->remove($damageType);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);

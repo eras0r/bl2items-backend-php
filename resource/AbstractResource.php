@@ -51,6 +51,17 @@ abstract class AbstractResource extends Resource {
         return $this->entityManager;
     }
 
+    /**
+     * Gets the entity name for the ORM mapper on which this resource is based on.
+     * @return string the entity name which belongs to this repository.
+     */
+    protected abstract function getEnityName();
+
+    /**
+     * Validates the given damage type associative array.
+     * @param $entity associative array containing the entity object to be validated
+     * @return array associative array containing validation errors (if any).
+     */
     protected abstract function validate($entity);
 
     protected function handleUniqueKeyException(DBALException $e) {

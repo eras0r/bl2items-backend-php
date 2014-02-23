@@ -23,7 +23,7 @@ class DamageTypeCollectionResource extends AbstractDamageTypeResource {
      * @provides application/json
      */
     public function getAll() {
-        $damageTypeRepository = $this->getEntityManager()->getRepository(DamageType::getEntityName());
+        $damageTypeRepository = $this->getEntityManager()->getRepository($this->getEnityName());
         $damageTypes = array();
 
         foreach ($damageTypeRepository->findBy(array(), array('sortOrder' => 'asc')) as $m) {

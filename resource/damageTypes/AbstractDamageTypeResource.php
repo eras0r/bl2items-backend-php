@@ -2,17 +2,27 @@
 
 require_once 'vendor/autoload.php';
 
+require_once "model/DamageType.php";
+
 /**
  * Abstract super class for all RESTful resources based on the {@link DamageType} entity.
  */
 class AbstractDamageTypeResource extends AbstractResource {
 
     /**
+     * Gets the entity name for the ORM mapper on which this resource is based on.
+     * @return string the entity name which belongs to this repository.
+     */
+    protected function getEnityName() {
+        return DamageType::getEntityName();
+    }
+
+    /**
      * Validates the given damage type associative array.
-     * @param $damageType associative array containing the object to be validated
+     * @param $entity associative array containing the entity object to be validated
      * @return array associative array containing validation errors (if any).
      */
-    protected function validate($damageType) {
+    protected function validate($entity) {
         $errors = array();
         if (empty($damageType["name"])) {
             $errors["name"] = "Name is required";

@@ -2,13 +2,12 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/Manufacturer.php";
-
 use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
 /**
- * This class defines an example resource that is wired into the URI /example
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on single instances of the {@link Manufacturer} entity.
  * @uri /manufacturers/:id
  * @uri /manufacturers/:id/
  */
@@ -21,7 +20,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
      * @provides application/json
      */
     public function display() {
-        $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
+        $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
         return json_encode($manufacturer->getJson());
     }
 
@@ -40,7 +39,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         } else {
             try {
-                $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
+                $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
                 $manufacturer->setName($m["name"]);
 
                 $this->getEntityManager()->persist($manufacturer);
@@ -60,7 +59,7 @@ class ManufacturerResource extends AbstractManufacturerResource {
      */
     public
     function remove() {
-        $manufacturer = $this->getEntityManager()->find(Manufacturer::getEntityName(), $this->id);
+        $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
         $this->getEntityManager()->remove($manufacturer);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);
