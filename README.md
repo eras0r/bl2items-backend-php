@@ -14,9 +14,9 @@ Setup
 Prepare database
 ----------------
 1. Create a new database schema
-2. edit include/config.php with the configuration for your database
-3. create the database structure by executing the script sql/create-schema.sql in your database
-4. insert master data by executing the sql/insert-master-data.sql
+2. edit ```include/config.php``` with the configuration for your database
+3. create the database structure by executing the script `sql/create-schema.sql` in your database
+4. insert master data by executing the `sql/insert-master-data.sql`
 
 
 5. use the scripts within the sql folder to create the required table and fill it with some data if you like.
