@@ -19,6 +19,11 @@ class Manufacturer extends AbstractEntity {
      **/
     protected $name;
 
+    // constructor used for JSON
+    public function __construct(array $data) {
+        parent::__construct($data);
+    }
+
     public function getId() {
         return $this->id;
     }
