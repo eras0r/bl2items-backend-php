@@ -9,7 +9,8 @@ use Doctrine\DBAL\DBALException;
 
 
 /**
- * This class defines the resource for single instances of the {@link DamageType} entity.
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on single instances of the {@link DamageType} entity.
  * @uri /damageTypes/:id
  * @uri /damageTypes/:id/
  */

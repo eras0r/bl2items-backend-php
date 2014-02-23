@@ -13,6 +13,9 @@ require_once 'vendor/autoload.php';
 
 require_once 'include/config.php';
 
+/**
+ * Abstract super class for all RESTful resources.
+ */
 abstract class AbstractResource extends Resource {
 
     /**

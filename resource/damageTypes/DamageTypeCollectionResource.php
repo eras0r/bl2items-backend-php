@@ -8,7 +8,8 @@ use Tonic\Response;
 use Doctrine\DBAL\DBALException;
 
 /**
- * This class defines the resource for collections of the {@link DamageType} entity.
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on collections of the {@link DamageType} entity.
  * @uri /damageTypes
  * @uri /damageTypes/
  */
