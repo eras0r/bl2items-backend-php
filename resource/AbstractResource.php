@@ -32,7 +32,7 @@ abstract class AbstractResource extends Resource {
                 'driver' => DB_DRIVER,
                 'user' => DB_USER,
                 'password' => DB_PASSWORD,
-                'dbname' => DB_NAME,
+                'dbname' => DB_NAME
             );
 
             // obtaining the entity manager

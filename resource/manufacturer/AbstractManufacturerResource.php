@@ -12,12 +12,6 @@ class AbstractManufacturerResource extends AbstractResource {
         if (empty($rarity["name"])) {
             $errors["name"] = "Name is required";
         }
-        if (empty($rarity["color"])) {
-            $errors["color"] = "Color is required";
-        }
-        if (empty($rarity["sortOrder"])) {
-            $errors["sortOrder"] = "Sort order is required";
-        }
         return $errors;
     }
 

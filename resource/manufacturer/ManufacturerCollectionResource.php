@@ -25,7 +25,7 @@ class ManufacturerCollectionResource extends AbstractManufacturerResource {
         $manufacturerRepository = $this->getEntityManager()->getRepository('Manufacturer');
         $manufacturers = array();
 
-        foreach ($manufacturerRepository->findBy(array(), array('sortOrder' => 'asc')) as $m) {
+        foreach ($manufacturerRepository->findBy(array(), array('name' => 'asc')) as $m) {
             $manufacturers[] = $m->getJson();
         }
 
