@@ -1,7 +1,7 @@
 Borderlands 2 item database backend
 ===================================
 This is a php REST JSON interface for the borderland 2 items application.
-The data is stored in a database (default is MySQL) and then retrived by using the [doctrine ORM mapper] (http://www.doctrine-project.org/projects/orm.html)
+The data is stored in a database (default is [MySQL] (http://www.mysql.com/)) and then retrived by using the [doctrine ORM mapper] (http://www.doctrine-project.org/projects/orm.html)
 The resources are provided in a RESTful way by using the [tonic](http://www.peej.co.uk/tonic/).
 
 Setup
