@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/Manufacturer.php";
+require_once 'model/Manufacturer.php';
 
 /**
  * Abstract super class for all RESTfulresources based on the {@link Manufacturer} entity.

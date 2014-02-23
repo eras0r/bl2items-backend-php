@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/DamageType.php";
+require_once 'model/DamageType.php';
 
 /**
  * Abstract super class for all RESTful resources based on the {@link DamageType} entity.

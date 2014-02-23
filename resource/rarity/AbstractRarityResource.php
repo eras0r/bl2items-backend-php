@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-require_once "model/Rarity.php";
+require_once 'model/Rarity.php';
 
 /**
  * Abstract super class for all resources based on the {@link Rarity} enity.
