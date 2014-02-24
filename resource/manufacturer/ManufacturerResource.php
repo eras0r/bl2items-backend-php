@@ -1,8 +1,12 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'ManufacturerResourceHelper.php';
 
+use Tonic\Application;
 use Tonic\Response;
+use Tonic\Request;
+
 use Doctrine\DBAL\DBALException;
 
 /**
@@ -11,17 +15,15 @@ use Doctrine\DBAL\DBALException;
  * @uri /manufacturers/:id
  * @uri /manufacturers/:id/
  */
-class ManufacturerResource extends AbstractManufacturerResource {
+class ManufacturerResource extends AbstractSingleEntityResource {
 
     /**
-     * Gets a single manufacturer
-     *
-     * @method GET
-     * @provides application/json
+     * Constructor used by tonic.
+     * @param Tonic\Application $app
+     * @param Tonic\Request $request
      */
-    public function display() {
-        $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
-        return json_encode($manufacturer->getJson());
+    function __construct(Application $app, Request $request) {
+        parent::__construct($app, $request, new ManufacturerResourceHelper());
     }
 
     /**
@@ -34,12 +36,12 @@ class ManufacturerResource extends AbstractManufacturerResource {
     public function update() {
         $m = json_decode($this->request->data, true);
 
-        $errors = $this->validate($m);
+        $errors = $this->getResourceHelper()->validate($m);
         if (!empty($errors)) {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         } else {
             try {
-                $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
+                $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
                 $manufacturer->setName($m["name"]);
 
                 $this->getEntityManager()->persist($manufacturer);
@@ -57,9 +59,8 @@ class ManufacturerResource extends AbstractManufacturerResource {
      *
      * @method DELETE
      */
-    public
-    function remove() {
-        $manufacturer = $this->getEntityManager()->find($this->getEnityName(), $this->id);
+    public function remove() {
+        $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
         $this->getEntityManager()->remove($manufacturer);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);

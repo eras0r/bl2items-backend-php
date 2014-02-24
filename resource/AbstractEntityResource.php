@@ -1,5 +1,7 @@
 <?php
 
+require_once 'include/config.php';
+
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
@@ -9,25 +11,46 @@ use Tonic\Resource;
 use Tonic\Response;
 use Tonic\Request;
 
-require_once 'vendor/autoload.php';
-
-require_once 'include/config.php';
-
 /**
- * Abstract super class for all RESTful resources.
+ * Abstract super class for all entity based tonic resources.
  */
-abstract class AbstractResource extends Resource {
+abstract class AbstractEntityResource extends Resource {
 
     /**
      * HTTP status code used for validation errors
      */
     const UNPROCESSABLE_ENTITY = 422;
 
+    /**
+     * @var Doctrine\ORM\EntityManager the doctrine entity manager
+     */
     private $entityManager;
 
-    // constructor for resources do have to invoke parent constructor and must have exactly this signature
-    function __construct(Application $app, Request $request) {
+    /**
+     * @var AbstractResourceHelper the resource hellper
+     */
+    private $resourceHelper;
+
+    /**
+     * Constructor used by tonic.
+     * @param Tonic\Application $app
+     * @param Tonic\Request $request
+     * @param AbstractResourceHelper $resourceHelper
+     */
+    function __construct(Application $app, Request $request, AbstractResourceHelper $resourceHelper) {
         parent::__construct($app, $request);
+        $this->resourceHelper = $resourceHelper;
+    }
+
+    /**
+     * Needed for CORS (UI can be on different domain than API).
+     * e.g.     API:     http://localhost/
+     *           UI:     http://localhost:9000
+     * @method OPTIONS
+     * @provides application/json
+     */
+    public function options() {
+
     }
 
     protected function getEntityManager() {
@@ -51,19 +74,6 @@ abstract class AbstractResource extends Resource {
         return $this->entityManager;
     }
 
-    /**
-     * Gets the entity name for the ORM mapper on which this resource is based on.
-     * @return string the entity name which belongs to this repository.
-     */
-    protected abstract function getEnityName();
-
-    /**
-     * Validates the given damage type associative array.
-     * @param $entity associative array containing the entity object to be validated
-     * @return array associative array containing validation errors (if any).
-     */
-    protected abstract function validate($entity);
-
     protected function handleUniqueKeyException(DBALException $e) {
         if ($e->getPrevious()->getCode() === '23000') {
             $errors = array();
@@ -76,14 +86,11 @@ abstract class AbstractResource extends Resource {
     }
 
     /**
-     * Needed for CORS (UI can be on different domain than API).
-     * e.g.     API:     http://localhost/
-     *           UI:     http://localhost:9000
-     * @method OPTIONS
-     * @provides application/json
+     * Gets the resource helper
+     * @return \AbstractResourceHelper the resource helper
      */
-    function options() {
-
+    protected function getResourceHelper() {
+        return $this->resourceHelper;
     }
 
 }

@@ -1,19 +1,14 @@
 <?php
 
-require_once 'vendor/autoload.php';
-
 require_once 'model/Manufacturer.php';
 
-/**
- * Abstract super class for all RESTfulresources based on the {@link Manufacturer} entity.
- */
-class AbstractManufacturerResource extends AbstractResource {
+class ManufacturerResourceHelper extends AbstractResourceHelper {
 
     /**
      * Gets the entity name for the ORM mapper on which this resource is based on.
      * @return string the entity name which belongs to this repository.
      */
-    protected function getEnityName() {
+    public function getEntityName() {
         return Manufacturer::getEntityName();
     }
 
@@ -22,12 +17,22 @@ class AbstractManufacturerResource extends AbstractResource {
      * @param $entity associative array containing the entity object to be validated
      * @return array associative array containing validation errors (if any).
      */
-    protected function validate($entity) {
+    public function validate($entity) {
         $errors = array();
-        if (empty($damageType["name"])) {
+        if (empty($entity["name"])) {
             $errors["name"] = "Name is required";
         }
         return $errors;
+    }
+
+    /**
+     *
+     * Creates a instance of the entity on which this repository is based
+     * @param array $properties array holding the property values for the entity instance to be created.
+     * @return AbstractEntity a new entity object
+     */
+    public function createNewEntityInstance(array $properties) {
+        return new Manufacturer($properties);
     }
 
 }
