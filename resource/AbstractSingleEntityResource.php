@@ -33,7 +33,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      * @provides application/json
      */
     public function display() {
-        $entityObj = $this->getEntityManager()->find($this->getEntityName(), $this->id);
+        $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
         return json_encode($entityObj->getJson());
     }
 
