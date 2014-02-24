@@ -37,4 +37,16 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
         return json_encode($entityObj->getJson());
     }
 
+    /**
+     * Deletes a single manufacturer
+     *
+     * @method DELETE
+     */
+    public function remove() {
+        $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+        $this->getEntityManager()->remove($manufacturer);
+        $this->getEntityManager()->flush();
+        return new Response(Response::NOCONTENT);
+    }
+
 }

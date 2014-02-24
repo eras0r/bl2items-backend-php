@@ -54,16 +54,4 @@ class ManufacturerResource extends AbstractSingleEntityResource {
         return $this->display();
     }
 
-    /**
-     * Deletes a single manufacturer
-     *
-     * @method DELETE
-     */
-    public function remove() {
-        $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-        $this->getEntityManager()->remove($manufacturer);
-        $this->getEntityManager()->flush();
-        return new Response(Response::NOCONTENT);
-    }
-
 }
