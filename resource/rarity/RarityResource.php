@@ -1,28 +1,29 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'RarityResourceHelper.php';
 
-require_once 'model/Rarity.php';
-
+use Tonic\Application;
 use Tonic\Response;
+use Tonic\Request;
+
 use Doctrine\DBAL\DBALException;
 
 /**
- * This class defines an example resource that is wired into the URI /example
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on single instances of the {@link Rarity} entity.
  * @uri /rarities/:id
  * @uri /rarities/:id/
  */
-class RarityResource extends AbstractRarityResource {
+class RarityResource extends AbstractSingleEntityResource {
 
     /**
-     * Gets a single rarity
-     *
-     * @method GET
-     * @provides application/json
+     * Constructor used by tonic.
+     * @param Tonic\Application $app
+     * @param Tonic\Request $request
      */
-    public function display() {
-        $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
-        return json_encode($rarity->getJson());
+    function __construct(Application $app, Request $request) {
+        parent::__construct($app, $request, new RarityResourceHelper());
     }
 
     /**
@@ -33,39 +34,19 @@ class RarityResource extends AbstractRarityResource {
      * @provides application/json
      */
     public function update() {
-        $r = json_decode($this->request->data, true);
+        try {
+            $jsonData = $this->prepareEntityObjectUpdate();
 
-        $errors = $this->validate($r);
-        if (!empty($errors)) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($errors));
-        } else {
-            try {
-                $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
-                $rarity->setName($r["name"]);
-                $rarity->setColor($r["color"]);
-                $rarity->setSortOrder($r["sortOrder"]);
+            // do the entity updates
+            $rarity = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+            $rarity->setName($jsonData["name"]);
+            $rarity->setColor($jsonData["color"]);
+            $rarity->setSortOrder($jsonData["sortOrder"]);
 
-                $this->getEntityManager()->persist($rarity);
-                $this->getEntityManager()->flush();
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
+            return $this->saveEntityObject($rarity);
+        } catch (EntityObjectValidationException $e) {
+            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
         }
-
-        return $this->display();
-    }
-
-    /**
-     * Deletes a single rarity
-     *
-     * @method DELETE
-     */
-    public
-    function remove() {
-        $rarity = $this->getEntityManager()->find(Rarity::getEntityName(), $this->id);
-        $this->getEntityManager()->remove($rarity);
-        $this->getEntityManager()->flush();
-        return new Response(Response::NOCONTENT);
     }
 
 }

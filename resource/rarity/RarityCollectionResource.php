@@ -1,59 +1,30 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'RarityResourceHelper.php';
 
-require_once 'model/Rarity.php';
-
+use Tonic\Application;
 use Tonic\Response;
+use Tonic\Request;
+
 use Doctrine\DBAL\DBALException;
 
+
 /**
- * This class defines an example resource that is wired into the URI /example
+ * This class defines the resource which will provide a RESTful interface for all operations
+ * based on collections of the {@link Rarity} entity.
  * @uri /rarities
  * @uri /rarities/
  */
-class RarityCollectionResource extends AbstractRarityResource {
+class RarityCollectionResource extends AbstractCollectionEntityResource {
 
     /**
-     * Gets a list containing all rarities.
-     *
-     * @json
-     * @method GET
-     * @provides application/json
+     * Constructor used by tonic.
+     * @param Tonic\Application $app
+     * @param Tonic\Request $request
      */
-    public function getAll() {
-        $rarityRepository = $this->getEntityManager()->getRepository(Rarity::getEntityName());
-        $rarities = array();
-
-        foreach ($rarityRepository->findBy(array(), array('sortOrder' => 'asc')) as $r) {
-            $rarities[] = $r->getJson();
-        }
-
-        return json_encode($rarities);
-    }
-
-    /**
-     * Adds a new rarity
-     *
-     * @method POST
-     * @accepts application/json
-     */
-    public function add() {
-        // json decode to associative array
-        $r = json_decode($this->request->data, true);
-        $errors = $this->validate($r);
-        if (!empty($errors)) {
-            return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
-        } else {
-            try {
-                $rarity = new Rarity($r);
-                $this->getEntityManager()->persist($rarity);
-                $this->getEntityManager()->flush();
-                return new Response(Response::CREATED, json_encode($rarity->getJson()));
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
-        }
+    function __construct(Application $app, Request $request) {
+        parent::__construct($app, $request, new RarityResourceHelper());
     }
 
 }

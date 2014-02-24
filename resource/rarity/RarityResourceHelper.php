@@ -1,15 +1,15 @@
 <?php
 
-require_once 'model/Manufacturer.php';
+require_once 'model/Rarity.php';
 
-class ManufacturerResourceHelper extends AbstractResourceHelper {
+class RarityResourceHelper extends AbstractResourceHelper {
 
     /**
      * Gets the entity name for the ORM mapper on which this resource is based on.
      * @return string the entity name which belongs to this repository.
      */
     public function getEntityName() {
-        return Manufacturer::getEntityName();
+        return Rarity::getEntityName();
     }
 
     /**
@@ -22,6 +22,12 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
         if (empty($entity["name"])) {
             $errors["name"] = "Name is required";
         }
+        if (empty($entity["color"])) {
+            $errors["color"] = "Color is required";
+        }
+        if (empty($entity["sortOrder"])) {
+            $errors["sortOrder"] = "Sort order is required";
+        }
         return $errors;
     }
 
@@ -32,7 +38,7 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
      * @return AbstractEntity a new entity object
      */
     public function createNewEntityInstance(array $properties) {
-        return new Manufacturer($properties);
+        return new Rarity($properties);
     }
 
 }
