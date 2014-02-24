@@ -37,7 +37,7 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
         $properties = json_decode($this->request->data, true);
         $errors = $this->getResourceHelper()->validate($properties);
         if (!empty($errors)) {
-            return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
+            return new Response(AbstractEntityResource::UNPROCESSABLE_ENTITY, json_encode($errors));
         } else {
             try {
                 $damageType = $this->getResourceHelper()->createNewEntityInstance($properties);

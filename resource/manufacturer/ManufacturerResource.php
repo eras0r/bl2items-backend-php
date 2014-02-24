@@ -34,24 +34,17 @@ class ManufacturerResource extends AbstractSingleEntityResource {
      * @provides application/json
      */
     public function update() {
-        $m = json_decode($this->request->data, true);
+        try {
+            $jsonData = $this->prepareEntityObjectUpdate();
 
-        $errors = $this->getResourceHelper()->validate($m);
-        if (!empty($errors)) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($errors));
-        } else {
-            try {
-                $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-                $manufacturer->setName($m["name"]);
+            // do the entity updates
+            $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+            $manufacturer->setName($jsonData["name"]);
 
-                $this->getEntityManager()->persist($manufacturer);
-                $this->getEntityManager()->flush();
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
+            return $this->saveEntityObject($manufacturer);
+        } catch (EntityObjectValidationException $e) {
+            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
         }
-
-        return $this->display();
     }
 
 }

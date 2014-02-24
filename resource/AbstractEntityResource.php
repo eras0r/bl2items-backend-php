@@ -82,7 +82,7 @@ abstract class AbstractEntityResource extends Resource {
                 $errors[$constraintName] = "Already exists!";
             }
         }
-        return new Response(AbstractResource::UNPROCESSABLE_ENTITY, json_encode($errors));
+        return new Response(AbstractEntityResource::UNPROCESSABLE_ENTITY, json_encode($errors));
     }
 
     /**
