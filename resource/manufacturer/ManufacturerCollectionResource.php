@@ -27,24 +27,6 @@ class ManufacturerCollectionResource extends AbstractCollectionEntityResource {
         parent::__construct($app, $request, new ManufacturerResourceHelper());
     }
 
-    /**
-     * Gets a list containing all manufacturer.
-     *
-     * @json
-     * @method GET
-     * @provides application/json
-     */
-    public function getAll() {
-        $manufacturerRepository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
-        $manufacturers = array();
-
-        foreach ($manufacturerRepository->findBy(array(), array('name' => 'asc')) as $m) {
-            $manufacturers[] = $m->getJson();
-        }
-
-        return json_encode($manufacturers);
-    }
-
 }
 
 ?>
