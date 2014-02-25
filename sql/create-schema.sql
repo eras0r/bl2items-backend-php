@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- This file generates the required schema for the
--- for the borderlands item database backend application.
+-- borderlands 2 item database backend application.
 -- --------------------------------------------------------
 
 -- --------------------------------------------------------
