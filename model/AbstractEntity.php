@@ -5,6 +5,12 @@
  */
 abstract class AbstractEntity {
 
+    /**
+     * @Id @Column(type="bigint") @GeneratedValue
+     * @var int
+     **/
+    protected $id;
+
     // constructor used for JSON
     protected function __construct(array $data) {
         foreach ($data as $key => $val) {
@@ -12,6 +18,14 @@ abstract class AbstractEntity {
                 $this->$key = $val;
             }
         }
+    }
+
+    /**
+     * Gets the id.
+     * @return int the id
+     */
+    public function getId() {
+        return $this->id;
     }
 
     /*

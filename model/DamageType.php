@@ -8,12 +8,6 @@ require_once 'AbstractEntity.php';
 class DamageType extends AbstractEntity {
 
     /**
-     * @Id @Column(type="bigint") @GeneratedValue
-     * @var int
-     **/
-    protected $id;
-
-    /**
      * @Column(type="string")
      * @var string
      **/
@@ -32,14 +26,6 @@ class DamageType extends AbstractEntity {
      */
     public function __construct(array $data) {
         parent::__construct($data);
-    }
-
-    /**
-     * Gets the id.
-     * @return int the id
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**

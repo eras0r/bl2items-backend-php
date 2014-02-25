@@ -8,12 +8,6 @@ require_once 'AbstractEntity.php';
 class Rarity extends AbstractEntity {
 
     /**
-     * @Id @Column(type="bigint") @GeneratedValue
-     * @var int
-     **/
-    protected $id;
-
-    /**
      * @Column(type="string")
      * @var string
      **/
@@ -38,14 +32,6 @@ class Rarity extends AbstractEntity {
      */
     public function __construct(array $data) {
         parent::__construct($data);
-    }
-
-    /**
-     * Gets the id.
-     * @return int the id
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**
