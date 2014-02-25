@@ -1,18 +1,18 @@
 <?php
 
-require_once 'model/Rarity.php';
+require_once 'model/DamageType.php';
 
 /**
- * Resource helper class for the {@link Rarity} entity.
+ * Resource helper class for the {@link DamageType} entity.
  */
-class RarityResourceHelper extends AbstractResourceHelper {
+class DamageTypeResourceHelper extends AbstractResourceHelper {
 
     /**
      * Gets the entity name for the ORM mapper on which this resource is based on.
      * @return string the entity name which belongs to this repository.
      */
     public function getEntityName() {
-        return Rarity::getEntityName();
+        return DamageType::getEntityName();
     }
 
     /**
@@ -24,9 +24,6 @@ class RarityResourceHelper extends AbstractResourceHelper {
         $errors = array();
         if (empty($entity["name"])) {
             $errors["name"] = "Name is required";
-        }
-        if (empty($entity["color"])) {
-            $errors["color"] = "Color is required";
         }
         if (empty($entity["sortOrder"])) {
             $errors["sortOrder"] = "Sort order is required";
@@ -41,7 +38,7 @@ class RarityResourceHelper extends AbstractResourceHelper {
      * @return AbstractEntity a new entity object
      */
     public function createNewEntityInstance(array $properties) {
-        return new Rarity($properties);
+        return new DamageType($properties);
     }
 
 }

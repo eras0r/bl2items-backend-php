@@ -1,12 +1,13 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'DamageTypeResourceHelper.php';
 
-require_once 'model/DamageType.php';
-
+use Tonic\Application;
 use Tonic\Response;
-use Doctrine\DBAL\DBALException;
+use Tonic\Request;
 
+use Doctrine\DBAL\DBALException;
 
 /**
  * This class defines the resource which will provide a RESTful interface for all operations
@@ -14,18 +15,15 @@ use Doctrine\DBAL\DBALException;
  * @uri /damageTypes/:id
  * @uri /damageTypes/:id/
  */
-class DamageTypeResource extends AbstractDamageTypeResource {
+class DamageTypeResource extends AbstractSingleEntityResource {
 
     /**
-     * Gets a single damage type
-     *
-     * @method GET
-     * @provides application/json
-     * @return string the JSON representation of the damage type
+     * Constructor used by tonic.
+     * @param Tonic\Application $app
+     * @param Tonic\Request $request
      */
-    public function display() {
-        $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
-        return json_encode($damageType->getJson());
+    function __construct(Application $app, Request $request) {
+        parent::__construct($app, $request, new DamageTypeResourceHelper());
     }
 
     /**
@@ -34,41 +32,20 @@ class DamageTypeResource extends AbstractDamageTypeResource {
      * @method PUT
      * @accepts application/json
      * @provides application/json
-     * @return string|Tonic\Response
      */
     public function update() {
-        $dt = json_decode($this->request->data, true);
-        $errors = $this->validate($dt);
+        try {
+            $jsonData = $this->prepareEntityObjectUpdate();
 
-        if (!empty($errors)) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($errors));
-        } else {
-            try {
-                $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
-                $damageType->setName($dt["name"]);
-                $damageType->setSortOrder($dt["sortOrder"]);
+            // do the entity updates
+            $damageType = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+            $damageType->setName($jsonData["name"]);
+            $damageType->setSortOrder($jsonData["sortOrder"]);
 
-                $this->getEntityManager()->persist($damageType);
-                $this->getEntityManager()->flush();
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
+            return $this->saveEntityObject($damageType);
+        } catch (EntityObjectValidationException $e) {
+            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
         }
-
-        return $this->display();
-    }
-
-    /**
-     * Deletes a single damage type.
-     *
-     * @method DELETE
-     * @return Tonic\Response
-     */
-    public function remove() {
-        $damageType = $this->getEntityManager()->find($this->getEnityName(), $this->id);
-        $this->getEntityManager()->remove($damageType);
-        $this->getEntityManager()->flush();
-        return new Response(Response::NOCONTENT);
     }
 
 }

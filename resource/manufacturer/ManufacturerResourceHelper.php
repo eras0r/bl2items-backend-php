@@ -2,6 +2,9 @@
 
 require_once 'model/Manufacturer.php';
 
+/**
+ * Resource helper class for the {@link Manufacturer} entity.
+ */
 class ManufacturerResourceHelper extends AbstractResourceHelper {
 
     /**
