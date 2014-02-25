@@ -20,11 +20,19 @@ abstract class AbstractResourceHelper {
     public abstract function validate($entity);
 
     /**
-     *
      * Creates a instance of the entity on which this repository is based
      * @param array $properties array holding the property values for the entity instance to be created.
      * @return AbstractEntity a new entity object
      */
     public abstract function createNewEntityInstance(array $properties);
+
+
+    /**
+     * Updates the given entity with the values of the given JSON data object
+     * @param AbstractEntity $entityObject the entity object to be updated
+     * @param $jsonData the JSON data to be set to the entity object.
+     * @return mixed AbstractEntity the updated entity object
+     */
+    public abstract function updateEntityObject(AbstractEntity $entityObject, $jsonData);
 
 }

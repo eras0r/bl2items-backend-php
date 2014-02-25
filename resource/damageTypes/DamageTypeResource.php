@@ -26,26 +26,4 @@ class DamageTypeResource extends AbstractSingleEntityResource {
         parent::__construct($app, $request, new DamageTypeResourceHelper());
     }
 
-    /**
-     * Updates a single damage type
-     *
-     * @method PUT
-     * @accepts application/json
-     * @provides application/json
-     */
-    public function update() {
-        try {
-            $jsonData = $this->prepareEntityObjectUpdate();
-
-            // do the entity updates
-            $damageType = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-            $damageType->setName($jsonData["name"]);
-            $damageType->setSortOrder($jsonData["sortOrder"]);
-
-            return $this->saveEntityObject($damageType);
-        } catch (EntityObjectValidationException $e) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
-        }
-    }
-
 }

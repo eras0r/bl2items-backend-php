@@ -38,4 +38,14 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
         return new Manufacturer($properties);
     }
 
+    /**
+     * Updates the given entity with the values of the given JSON data object
+     * @param AbstractEntity $entityObject the entity object to be updated
+     * @param $jsonData the JSON data to be set to the entity object.
+     * @return mixed
+     */
+    public function updateEntityObject(AbstractEntity $entityObject, $jsonData) {
+        $entityObject->setName($jsonData["name"]);
+    }
+
 }

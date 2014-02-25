@@ -26,25 +26,4 @@ class ManufacturerResource extends AbstractSingleEntityResource {
         parent::__construct($app, $request, new ManufacturerResourceHelper());
     }
 
-    /**
-     * Updates a single manufacturer
-     *
-     * @method PUT
-     * @accepts application/json
-     * @provides application/json
-     */
-    public function update() {
-        try {
-            $jsonData = $this->prepareEntityObjectUpdate();
-
-            // do the entity updates
-            $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-            $manufacturer->setName($jsonData["name"]);
-
-            return $this->saveEntityObject($manufacturer);
-        } catch (EntityObjectValidationException $e) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
-        }
-    }
-
 }

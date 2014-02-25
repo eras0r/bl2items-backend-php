@@ -41,7 +41,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
     }
 
     /**
-     * Gets a single manufacturer
+     * Gets a single entity object.
      *
      * @method GET
      * @provides application/json
@@ -52,40 +52,40 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
     }
 
     /**
-     * Deletes a single manufacturer
+     * Deletes a single entity object.
      *
      * @method DELETE
      */
     public function remove() {
-        $manufacturer = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-        $this->getEntityManager()->remove($manufacturer);
+        $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+        $this->getEntityManager()->remove($entityObject);
         $this->getEntityManager()->flush();
         return new Response(Response::NOCONTENT);
     }
 
     /**
-     * @return mixed the encoded JSON entity object
-     * @throws EntityObjectValidationException if validation errors occured
+     * Updates a single entity object.
+     *
+     * @method PUT
+     * @accepts application/json
+     * @provides application/json
      */
-    protected function prepareEntityObjectUpdate() {
+    public function update() {
         $jsonData = json_decode($this->request->data, true);
         $errors = $this->getResourceHelper()->validate($jsonData);
         if (empty($errors)) {
-            return $jsonData;
+            $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+            $this->getResourceHelper()->updateEntityObject($entityObject, $jsonData);
+            try {
+                $this->getEntityManager()->persist($entityObject);
+                $this->getEntityManager()->flush();
+                return $this->display();
+            } catch (DBALException $e) {
+                return $this->handleUniqueKeyException($e);
+            }
         } else {
-            throw new EntityObjectValidationException($errors);
-        }
-    }
-
-    protected function saveEntityObject($entityObject) {
-        try {
-            $this->getEntityManager()->persist($entityObject);
-            $this->getEntityManager()->flush();
-            return $this->display();
-        } catch (DBALException $e) {
-            return $this->handleUniqueKeyException($e);
+            return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         }
     }
 
 }
-

@@ -26,27 +26,4 @@ class RarityResource extends AbstractSingleEntityResource {
         parent::__construct($app, $request, new RarityResourceHelper());
     }
 
-    /**
-     * Updates a single rarity
-     *
-     * @method PUT
-     * @accepts application/json
-     * @provides application/json
-     */
-    public function update() {
-        try {
-            $jsonData = $this->prepareEntityObjectUpdate();
-
-            // do the entity updates
-            $rarity = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-            $rarity->setName($jsonData["name"]);
-            $rarity->setColor($jsonData["color"]);
-            $rarity->setSortOrder($jsonData["sortOrder"]);
-
-            return $this->saveEntityObject($rarity);
-        } catch (EntityObjectValidationException $e) {
-            return new Response(Response::NOTACCEPTABLE, json_encode($e->getValidationErrors()));
-        }
-    }
-
 }
