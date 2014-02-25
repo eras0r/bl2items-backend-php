@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Abstract super class for all entities.
  */
@@ -28,6 +29,4 @@ abstract class AbstractEntity {
     public static function getEntityName() {
         return get_called_class();
     }
-
-
 }

@@ -3,9 +3,9 @@
 require_once 'vendor/autoload.php';
 
 use Tonic\Application;
+use Tonic\NotFoundException;
 use Tonic\Request;
 use Tonic\Response;
-use Tonic\NotFoundException;
 use Tonic\UnauthorizedException;
 
 

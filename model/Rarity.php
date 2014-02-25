@@ -33,6 +33,7 @@ class Rarity extends AbstractEntity {
 
     /**
      * Creates a new rarity by initializing is properties by using hte values given in the associative array.
+     *
      * @param array $data associative array holding the properties for the rarity.
      */
     public function __construct(array $data) {
@@ -57,6 +58,7 @@ class Rarity extends AbstractEntity {
 
     /**
      * Sets the name.
+     *
      * @param string $name the name to be set.
      */
     public function setName($name) {
@@ -73,6 +75,7 @@ class Rarity extends AbstractEntity {
 
     /**
      * Sets the color.
+     *
      * @param $color the color to be set
      */
     public function setColor($color) {
@@ -89,12 +92,12 @@ class Rarity extends AbstractEntity {
 
     /**
      * Sets the sort order.
+     *
      * @param $sortOrder the sort order to be set.
      */
     public function setSortOrder($sortOrder) {
         $this->sortOrder = $sortOrder;
     }
-
 }
 
 ?>

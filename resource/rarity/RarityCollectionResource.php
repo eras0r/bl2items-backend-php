@@ -4,10 +4,7 @@ require_once 'vendor/autoload.php';
 require_once 'RarityResourceHelper.php';
 
 use Tonic\Application;
-use Tonic\Response;
 use Tonic\Request;
-
-use Doctrine\DBAL\DBALException;
 
 
 /**
@@ -20,13 +17,13 @@ class RarityCollectionResource extends AbstractCollectionEntityResource {
 
     /**
      * Constructor used by tonic.
+     *
      * @param Tonic\Application $app
      * @param Tonic\Request $request
      */
     function __construct(Application $app, Request $request) {
         parent::__construct($app, $request, new RarityResourceHelper());
     }
-
 }
 
 ?>

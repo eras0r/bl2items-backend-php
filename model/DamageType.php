@@ -27,6 +27,7 @@ class DamageType extends AbstractEntity {
 
     /**
      * Creates a new damage type by initializing is properties by using hte values given in the associative array.
+     *
      * @param array $data associative array holding the properties for the damage type.
      */
     public function __construct(array $data) {
@@ -51,6 +52,7 @@ class DamageType extends AbstractEntity {
 
     /**
      * Sets the name.
+     *
      * @param string $name the name to be set.
      */
     public function setName($name) {
@@ -67,12 +69,12 @@ class DamageType extends AbstractEntity {
 
     /**
      * Sets the sort order.
+     *
      * @param int $sortOrder the sort order to be set.
      */
     public function setSortOrder($sortOrder) {
         $this->sortOrder = $sortOrder;
     }
-
 }
 
 ?>

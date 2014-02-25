@@ -2,14 +2,13 @@
 
 require_once 'include/config.php';
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Tonic\Application;
+use Tonic\Request;
 use Tonic\Resource;
 use Tonic\Response;
-use Tonic\Request;
 
 /**
  * Abstract super class for all entity based tonic resources.
@@ -33,6 +32,7 @@ abstract class AbstractEntityResource extends Resource {
 
     /**
      * Constructor used by tonic.
+     *
      * @param Tonic\Application $app
      * @param Tonic\Request $request
      * @param AbstractResourceHelper $resourceHelper
@@ -50,7 +50,6 @@ abstract class AbstractEntityResource extends Resource {
      * @provides application/json
      */
     public function options() {
-
     }
 
     protected function getEntityManager() {
@@ -92,5 +91,4 @@ abstract class AbstractEntityResource extends Resource {
     protected function getResourceHelper() {
         return $this->resourceHelper;
     }
-
 }

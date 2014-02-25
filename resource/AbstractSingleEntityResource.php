@@ -2,14 +2,10 @@
 
 require_once 'AbstractEntityResource.php';
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-
 use Tonic\Application;
-use Tonic\Resource;
-use Tonic\Response;
 use Tonic\Request;
+use Tonic\Response;
 
 class EntityObjectValidationException extends Exception {
 
@@ -22,7 +18,6 @@ class EntityObjectValidationException extends Exception {
     public function getValidationErrors() {
         return $this->validationErrors;
     }
-
 }
 
 /**
@@ -32,6 +27,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
 
     /**
      * Constructor used by tonic.
+     *
      * @param Tonic\Application $app
      * @param Tonic\Request $request
      * @param AbstractResourceHelper $resourceHelper
@@ -42,7 +38,6 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
 
     /**
      * Gets a single entity object.
-     *
      * @method GET
      * @provides application/json
      */
@@ -53,7 +48,6 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
 
     /**
      * Deletes a single entity object.
-     *
      * @method DELETE
      */
     public function remove() {
@@ -65,7 +59,6 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
 
     /**
      * Updates a single entity object.
-     *
      * @method PUT
      * @accepts application/json
      * @provides application/json
@@ -87,5 +80,4 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
             return new Response(Response::NOTACCEPTABLE, json_encode($errors));
         }
     }
-
 }

@@ -19,9 +19,9 @@ class Manufacturer extends AbstractEntity {
      **/
     protected $name;
 
-
     /**
      * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
+     *
      * @param array $data associative array holding the properties for the manufacturer.
      */
     public function __construct(array $data) {
@@ -46,12 +46,12 @@ class Manufacturer extends AbstractEntity {
 
     /**
      * Sets the name.
+     *
      * @param string $name the name to be set.
      */
     public function setName($name) {
         $this->name = $name;
     }
-
 }
 
 ?>

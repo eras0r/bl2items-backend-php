@@ -2,14 +2,10 @@
 
 require_once 'AbstractEntityResource.php';
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-
 use Tonic\Application;
-use Tonic\Resource;
-use Tonic\Response;
 use Tonic\Request;
+use Tonic\Response;
 
 /**
  * Abstract super class for all RESTful resources which are based on a collection of an entity's objects.
@@ -18,6 +14,7 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
 
     /**
      * Constructor used by tonic.
+     *
      * @param Tonic\Application $app
      * @param Tonic\Request $request
      * @param AbstractResourceHelper $resourceHelper
@@ -28,7 +25,6 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
 
     /**
      * Adds a new damage type
-     *
      * @method POST
      * @accepts application/json
      */
@@ -52,7 +48,6 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
 
     /**
      * Gets a list containing all manufacturer.
-     *
      * @json
      * @method GET
      * @provides application/json
@@ -77,7 +72,6 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
      * Gets the sort order based on the GET parameter named "sort".
      * There can be multiple sort order parameters separated by comma ",".
      * If the parameter start with a "-" this means this parameter will be sorted in descending order.
-     *
      * @return array the sort order array as used by the doctrine repository (the key is the name of the property
      * to be sorted, the value if either "asc" or "desc".
      */
@@ -97,5 +91,4 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
             return array();
         }
     }
-
 }
