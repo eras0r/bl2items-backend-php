@@ -27,3 +27,19 @@ CREATE TABLE IF NOT EXISTS `manufacturer` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `damage_type`
+--
+CREATE TABLE IF NOT EXISTS `damage_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sortOrder` int(11) NOT NULL,
+  `color` varchar(7) COLLATE utf8_unicode_ci NOT NULL,
+  `damageLabel` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `chanceLabel` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `additionalText` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_name` (`name`),
+  UNIQUE KEY `unique_sortOrder` (`sortOrder`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;

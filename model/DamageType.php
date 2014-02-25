@@ -3,7 +3,7 @@
 require_once 'AbstractEntity.php';
 
 /**
- * @Entity @Table(name="damage_type", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"})})
+ * @Entity @Table(name="damage_type", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"}), @UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
  **/
 class DamageType extends AbstractEntity {
 
@@ -18,6 +18,30 @@ class DamageType extends AbstractEntity {
      * @var int
      **/
     protected $sortOrder;
+
+    /**
+     * @Column(type="string", length=7)
+     * @var string
+     **/
+    protected $color;
+
+    /**
+     * @Column(type="string", nullable=true)
+     * @var string
+     **/
+    protected $damageLabel;
+
+    /**
+     * @Column(type="string", nullable=true)
+     * @var string
+     **/
+    protected $chanceLabel;
+
+    /**
+     * @Column(type="string", nullable=true)
+     * @var string
+     **/
+    protected $additionalText;
 
     /**
      * Creates a new damage type by initializing is properties by using hte values given in the associative array.
@@ -61,6 +85,63 @@ class DamageType extends AbstractEntity {
     public function setSortOrder($sortOrder) {
         $this->sortOrder = $sortOrder;
     }
+
+    /**
+     * @return string
+     */
+    public function getColor() {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor($color) {
+        $this->color = $color;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDamageLabel() {
+        return $this->damageLabel;
+    }
+
+    /**
+     * @param string $damageLabel
+     */
+    public function setDamageLabel($damageLabel) {
+        $this->damageLabel = $damageLabel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChanceLabel() {
+        return $this->chanceLabel;
+    }
+
+    /**
+     * @param string $chanceLabel
+     */
+    public function setChanceLabel($chanceLabel) {
+        $this->chanceLabel = $chanceLabel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalText() {
+        return $this->additionalText;
+    }
+
+    /**
+     * @param string $additionalText
+     */
+    public function setAdditionalText($additionalText) {
+        $this->additionalText = $additionalText;
+    }
+
 }
 
 ?>

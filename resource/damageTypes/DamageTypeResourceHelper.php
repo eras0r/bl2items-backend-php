@@ -55,5 +55,8 @@ class DamageTypeResourceHelper extends AbstractResourceHelper {
     public function updateEntityObject(AbstractEntity $entityObject, $jsonData) {
         $entityObject->setName($jsonData["name"]);
         $entityObject->setSortOrder($jsonData["sortOrder"]);
+        $entityObject->setDamageLabel($jsonData["damageLabel"]);
+        $entityObject->setChanceLabel($jsonData["chanceLabel"]);
+        $entityObject->setAdditionalText($jsonData["additionalText"]);
     }
 }
