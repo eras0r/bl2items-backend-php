@@ -8,12 +8,14 @@ The resources are provided in a RESTful way by using the [tonic](http://www.peej
 Make sure you have [composer](http://getcomposer.org/) installed globally.
 
 ## Setup
-Clone the repository:
+clone the repository:
 ```
 git clone https://github.com/eras0r/bl2items-frontend
 ```
 navigate the the directory where your clone is located and type in 
-```composer install```
+```
+composer install
+```
 
 ## Prepare database
 1. Create a new database schema
