@@ -24,7 +24,7 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
     }
 
     /**
-     * Adds a new damage type
+     * Adds and saves a entity instance to the given resource.
      * @method POST
      * @accepts application/json
      */
@@ -36,10 +36,10 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
             return new Response(AbstractEntityResource::UNPROCESSABLE_ENTITY, json_encode($errors));
         } else {
             try {
-                $damageType = $this->getResourceHelper()->createNewEntityInstance($properties);
-                $this->getEntityManager()->persist($damageType);
+                $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
+                $this->getEntityManager()->persist($entityInstance);
                 $this->getEntityManager()->flush();
-                return new Response(Response::CREATED, json_encode($damageType->getJson()));
+                return new Response(Response::CREATED, json_encode($entityInstance->getJson()));
             } catch (DBALException $e) {
                 return $this->handleUniqueKeyException($e);
             }
@@ -47,20 +47,20 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
     }
 
     /**
-     * Gets a list containing all manufacturer.
+     * Gets a list containing all objects of the entity this resource is based on.
      * @json
      * @method GET
      * @provides application/json
      */
     public function getAll() {
-        $manufacturerRepository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
-        $manufacturers = array();
+        $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
+        $entityObjects = array();
 
-        foreach ($manufacturerRepository->findBy($this->getCriteria(), $this->getSortOrders()) as $m) {
-            $manufacturers[] = $m->getJson();
+        foreach ($repository->findBy($this->getCriteria(), $this->getSortOrders()) as $m) {
+            $entityObjects[] = $m->getJson();
         }
 
-        return json_encode($manufacturers);
+        return json_encode($entityObjects);
     }
 
     protected function getCriteria() {

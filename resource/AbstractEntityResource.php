@@ -74,8 +74,8 @@ abstract class AbstractEntityResource extends Resource {
     }
 
     protected function handleUniqueKeyException(DBALException $e) {
+        $errors = array();
         if ($e->getPrevious()->getCode() === '23000') {
-            $errors = array();
             if (\preg_match("%key 'unique_(?P<key>.+)'%", $e->getMessage(), $match)) {
                 $constraintName = $match['key'];
                 $errors[$constraintName] = "Already exists!";
@@ -86,7 +86,7 @@ abstract class AbstractEntityResource extends Resource {
 
     /**
      * Gets the resource helper
-     * @return \AbstractResourceHelper the resource helper
+     * @return AbstractResourceHelper the resource helper
      */
     protected function getResourceHelper() {
         return $this->resourceHelper;
