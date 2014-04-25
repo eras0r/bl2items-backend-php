@@ -65,10 +65,11 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      */
     public function update() {
         $jsonData = json_decode($this->request->data, true);
-        $errors = $this->getResourceHelper()->validate($jsonData);
+        /* @var $entityObject AbstractEntity */
+        $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
+        $this->getResourceHelper()->updateEntityObject($entityObject, $jsonData);
+        $errors = $entityObject->validate();
         if (empty($errors)) {
-            $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-            $this->getResourceHelper()->updateEntityObject($entityObject, $jsonData);
             try {
                 $this->getEntityManager()->persist($entityObject);
                 $this->getEntityManager()->flush();

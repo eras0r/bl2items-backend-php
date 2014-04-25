@@ -16,27 +16,6 @@ class RarityResourceHelper extends AbstractResourceHelper {
     }
 
     /**
-     * Validates the given associative array which holds the entity object's properties.
-     *
-     * @param $entity associative array containing the entity object to be validated
-     *
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate($entity) {
-        $errors = array();
-        if (empty($entity["name"])) {
-            $errors["name"] = "Name is required";
-        }
-        if (empty($entity["color"])) {
-            $errors["color"] = "Color is required";
-        }
-        if (empty($entity["sortOrder"])) {
-            $errors["sortOrder"] = "Sort order is required";
-        }
-        return $errors;
-    }
-
-    /**
      * Creates a instance of the entity on which this repository is based
      *
      * @param array $properties array holding the property values for the entity instance to be created.
@@ -56,8 +35,8 @@ class RarityResourceHelper extends AbstractResourceHelper {
      * @return mixed AbstractEntity the updated entity object
      */
     public function updateEntityObject(AbstractEntity $entityObject, $jsonData) {
-        $entityObject->setName($jsonData["name"]);
-        $entityObject->setColor($jsonData["color"]);
-        $entityObject->setSortOrder($jsonData["sortOrder"]);
+        $entityObject->setName($this->getValueFromJsonData($jsonData, "name"));
+        $entityObject->setColor($this->getValueFromJsonData($jsonData, "color"));
+        $entityObject->setSortOrder($this->getValueFromJsonData($jsonData, "sortOrder"));
     }
 }

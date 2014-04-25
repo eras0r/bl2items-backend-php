@@ -31,12 +31,12 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
     public function add() {
         // json decode to associative array
         $properties = json_decode($this->request->data, true);
-        $errors = $this->getResourceHelper()->validate($properties);
+        $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
+        $errors = $entityInstance->validate();
         if (!empty($errors)) {
             return new Response(AbstractEntityResource::UNPROCESSABLE_ENTITY, json_encode($errors));
         } else {
             try {
-                $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
                 $this->getEntityManager()->persist($entityInstance);
                 $this->getEntityManager()->flush();
                 return new Response(Response::CREATED, json_encode($entityInstance->getJson()));

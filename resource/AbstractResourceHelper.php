@@ -13,15 +13,6 @@ abstract class AbstractResourceHelper {
     public abstract function getEntityName();
 
     /**
-     * Validates the given entity.
-     *
-     * @param $entity array associative array containing the entity object to be validated
-     *
-     * @return array associative array containing validation errors (if any).
-     */
-    public abstract function validate($entity);
-
-    /**
      * Creates a instance of the entity on which this repository is based
      *
      * @param array $properties array holding the property values for the entity instance to be created.
@@ -35,8 +26,18 @@ abstract class AbstractResourceHelper {
      *
      * @param AbstractEntity $entityObject the entity object to be updated
      * @param $jsonData mixed the JSON data to be set to the entity object.
-     *
-     * @return mixed AbstractEntity the updated entity object
      */
     public abstract function updateEntityObject(AbstractEntity $entityObject, $jsonData);
+
+    /**
+     * Gets the value with the given key $key from the given json array $jsonData
+     *
+     * @param $jsonData array the json array
+     * @param $key string the key within the json array
+     *
+     * @return mixed the value with the given from the given json data array if the key existing, or null if the key is not existing.
+     */
+    protected function getValueFromJsonData($jsonData, $key) {
+        return (isset($jsonData[$key])) ? $jsonData[$key] : null;
+    }
 }

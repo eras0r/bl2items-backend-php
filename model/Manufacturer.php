@@ -38,6 +38,18 @@ class Manufacturer extends AbstractEntity {
     public function setName($name) {
         $this->name = $name;
     }
+
+    /**
+     * Validates the entity and returns an array containing validation errors (if any).
+     * @return array associative array containing validation errors (if any).
+     */
+    public function validate() {
+        $errors = array();
+        if (empty($this->name)) {
+            $errors["name"] = "Name is required";
+        }
+        return $errors;
+    }
 }
 
 ?>

@@ -43,4 +43,10 @@ abstract class AbstractEntity {
     public static function getEntityName() {
         return get_called_class();
     }
+
+    /**
+     * Validates the entity and returns an array containing validation errors (if any).
+     * @return array associative array containing validation errors (if any).
+     */
+    public abstract function validate();
 }

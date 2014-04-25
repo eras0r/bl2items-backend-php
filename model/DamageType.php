@@ -142,6 +142,20 @@ class DamageType extends AbstractEntity {
         $this->additionalText = $additionalText;
     }
 
+    /**
+     * Validates the entity and returns an array containing validation errors (if any).
+     * @return array associative array containing validation errors (if any).
+     */
+    public function validate() {
+        $errors = array();
+        if (empty($this->name)) {
+            $errors["name"] = "Name is required";
+        }
+        if (empty($this->sortOrder)) {
+            $errors["sortOrder"] = "Sort order is required";
+        }
+        return $errors;
+    }
 }
 
 ?>

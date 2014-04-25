@@ -62,7 +62,7 @@ class Rarity extends AbstractEntity {
     /**
      * Sets the color.
      *
-     * @param $color the color to be set
+     * @param $color string the color to be set
      */
     public function setColor($color) {
         $this->color = $color;
@@ -79,10 +79,28 @@ class Rarity extends AbstractEntity {
     /**
      * Sets the sort order.
      *
-     * @param $sortOrder the sort order to be set.
+     * @param $sortOrder int the sort order to be set.
      */
     public function setSortOrder($sortOrder) {
         $this->sortOrder = $sortOrder;
+    }
+
+    /**
+     * Validates the entity and returns an array containing validation errors (if any).
+     * @return array associative array containing validation errors (if any).
+     */
+    public function validate() {
+        $errors = array();
+        if (empty($this->name)) {
+            $errors["name"] = "Name is required";
+        }
+        if (empty($this->color)) {
+            $errors["color"] = "Color is required";
+        }
+        if (empty($this->sortOrder)) {
+            $errors["sortOrder"] = "Sort order is required";
+        }
+        return $errors;
     }
 }
 
