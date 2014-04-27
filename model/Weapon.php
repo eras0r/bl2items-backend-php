@@ -281,19 +281,19 @@ class Weapon extends AbstractEntity {
             $errors["damage"] = "Damage is required";
         }
         if (empty($this->accuracy)) {
-            $errors["accuracy"] = "Accuracy order is required";
+            $errors["accuracy"] = "Accuracy is required";
         }
         if (empty($this->fireRate)) {
-            $errors["fireRate"] = "Fire rate order is required";
+            $errors["fireRate"] = "Fire rate is required";
         }
         if (empty($this->reloadSpeed)) {
-            $errors["reloadSpeed"] = "Reload speed order is required";
+            $errors["reloadSpeed"] = "Reload speed is required";
         }
         if (empty($this->magazineSize)) {
-            $errors["magazineSize"] = "Magazine size order is required";
+            $errors["magazineSize"] = "Magazine size is required";
         }
         if (!isset($this->damageType)) {
-            $errors["damageType"] = "Damage type size order is required";
+            $errors["damageType"] = "Damage type is required";
         }
         // TODO create weaponType entity
 //        if (!isset($this->type)) {
@@ -304,11 +304,4 @@ class Weapon extends AbstractEntity {
         }
         return $errors;
     }
-
-//    public function loadReferencedObjects() {
-//        parent::loadReferencedObjects();
-    // invoked getters on referenced objects in order to consider them for JSON Serialization
-//        $this->getDamageType();
-//        $this->getManufacturer();
-//    }
 }

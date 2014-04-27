@@ -1,5 +1,7 @@
 <?php
 
+require_once 'util/EntityManagerFactory.php';
+
 /**
  * Abstract resource helper, which is responsible for creating and validating entity objects.
  * There is a concrete implementation for each entity of this class.
@@ -39,5 +41,13 @@ abstract class AbstractResourceHelper {
      */
     protected function getValueFromJsonData($jsonData, $key) {
         return (isset($jsonData[$key])) ? $jsonData[$key] : null;
+    }
+
+    /**
+     * Gets the entity manager.
+     * @return \Doctrine\ORM\EntityManager the entity manager
+     */
+    public function getEntityManager() {
+        return EntityManagerFactory::getEntityManager();
     }
 }

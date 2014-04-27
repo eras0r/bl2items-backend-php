@@ -2,6 +2,7 @@
 
 require_once 'model/Weapon.php';
 require_once 'model/DamageType.php';
+require_once 'model/Manufacturer.php';
 
 /**
  * Resource helper class for the {@link Weapon} entity.
@@ -43,16 +44,27 @@ class WeaponResourceHelper extends AbstractResourceHelper {
         $entityObject->setFireRate($this->getValueFromJsonData($jsonData, "fireRate"));
         $entityObject->setReloadSpeed($this->getValueFromJsonData($jsonData, "reloadSpeed"));
         $entityObject->setMagazineSize($this->getValueFromJsonData($jsonData, "magazineSize"));
-        // TODO convert referenced entity
-//        $damageTypeJson = $this->getValueFromJsonData($jsonData, "damageType");
-//        $damageType = new DamageType($damageTypeJson);
-//        $entityObject->setDamageType($damageType);
-
         $entityObject->setElemDamage($this->getValueFromJsonData($jsonData, "elemDamage"));
         $entityObject->setElemChance($this->getValueFromJsonData($jsonData, "elemChance"));
-        // TODO convert referenced entity
+
+        // get and set referenced entity objects
+        $entityObject->setDamageType($this->getReferencedEntityObject($jsonData, "damageType", DamageType::entityName()));
+        $entityObject->setManufacturer($this->getReferencedEntityObject($jsonData, "manufacturer", Manufacturer::entityName()));
+        // TODO set as soon as weaponType entity is implemented
 //        $entityObject->setType($this->getValueFromJsonData($jsonData, "type"));
-        // TODO convert referenced entity
-//        $entityObject->setManufacturer($this->getValueFromJsonData($jsonData, "manufacturer"));
+    }
+
+    /**
+     * Loads a referenced entity object from the given jsonData of the root object.
+     *
+     * @param $jsonData array the array holding the json representation of the root entity object to set the foreign
+     * @param $jsonDataKey string the key within the jsonData array which represents the foreign key to the entity object to be loaded.
+     * @param $entityName string the name of the entity to be loaded
+     *
+     * @return null|object the loaded entity object
+     */
+    private function getReferencedEntityObject($jsonData, $jsonDataKey, $entityName) {
+        $damageTypeJson = $this->getValueFromJsonData($jsonData, $jsonDataKey);
+        return isset($damageTypeJson["id"]) ? $damageType = $this->getEntityManager()->find($entityName, $damageTypeJson["id"]) : null;
     }
 }

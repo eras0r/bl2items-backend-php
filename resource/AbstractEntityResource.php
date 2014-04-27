@@ -2,10 +2,7 @@
 
 require_once 'include/config.php';
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use JMS\Serializer\SerializerBuilder;
 use Tonic\Application;
 use Tonic\Request;
@@ -21,11 +18,6 @@ abstract class AbstractEntityResource extends Resource {
      * HTTP status code used for validation errors
      */
     const UNPROCESSABLE_ENTITY = 422;
-
-    /**
-     * @var Doctrine\ORM\EntityManager the doctrine entity manager
-     */
-    private $entityManager;
 
     /**
      * @var AbstractResourceHelper the resource hellper
@@ -55,25 +47,7 @@ abstract class AbstractEntityResource extends Resource {
     }
 
     protected function getEntityManager() {
-        if (!isset($this->entityManager)) {
-            // Create a simple "default" Doctrine ORM configuration for Annotations
-            $isDevMode = true;
-            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/model"), $isDevMode, null, null, false);
-            AnnotationRegistry::registerAutoloadNamespace('JMS\Serializer\Annotation', __DIR__ . "/../vendor/jms/serializer/src");
-
-            // the connection configuration
-            $conn = array(
-                'driver' => DB_DRIVER,
-                'user' => DB_USER,
-                'password' => DB_PASSWORD,
-                'dbname' => DB_NAME
-            );
-
-            // obtaining the entity manager
-            $this->entityManager = EntityManager::create($conn, $config);
-        }
-
-        return $this->entityManager;
+        return $this->getResourceHelper()->getEntityManager();
     }
 
     protected function handleUniqueKeyException(DBALException $e) {
