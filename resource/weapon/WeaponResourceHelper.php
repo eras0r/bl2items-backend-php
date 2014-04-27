@@ -20,12 +20,14 @@ class WeaponResourceHelper extends AbstractResourceHelper {
     /**
      * Creates a instance of the entity on which this repository is based
      *
-     * @param array $properties array holding the property values for the entity instance to be created.
+     * @param array $jsonData array holding the property values for the entity instance to be created.
      *
      * @return AbstractEntity a new entity object
      */
-    public function createNewEntityInstance(array $properties) {
-        return new Weapon($properties);
+    public function createNewEntityInstance(array $jsonData) {
+        $weapon = new Weapon($jsonData);
+        $this->setReferencesEntityObjects($weapon, $jsonData);
+        return $weapon;
     }
 
     /**
@@ -47,11 +49,7 @@ class WeaponResourceHelper extends AbstractResourceHelper {
         $entityObject->setElemDamage($this->getValueFromJsonData($jsonData, "elemDamage"));
         $entityObject->setElemChance($this->getValueFromJsonData($jsonData, "elemChance"));
 
-        // get and set referenced entity objects
-        $entityObject->setDamageType($this->getReferencedEntityObject($jsonData, "damageType", DamageType::entityName()));
-        $entityObject->setManufacturer($this->getReferencedEntityObject($jsonData, "manufacturer", Manufacturer::entityName()));
-        // TODO set as soon as weaponType entity is implemented
-//        $entityObject->setType($this->getValueFromJsonData($jsonData, "type"));
+        $this->setReferencesEntityObjects($entityObject, $jsonData);
     }
 
     /**
@@ -66,5 +64,20 @@ class WeaponResourceHelper extends AbstractResourceHelper {
     private function getReferencedEntityObject($jsonData, $jsonDataKey, $entityName) {
         $damageTypeJson = $this->getValueFromJsonData($jsonData, $jsonDataKey);
         return isset($damageTypeJson["id"]) ? $damageType = $this->getEntityManager()->find($entityName, $damageTypeJson["id"]) : null;
+    }
+
+    /**
+     * Gets the referenced entity objects from the given jsonData and sets the on the given enityObject. Sub classes
+     * need to override this method in order so deal with references on entity objects.
+     *
+     * @param $entityObject AbstractEntity the entity object to set the referenced entity objects on
+     * @param $jsonData array the json data for to get the referenced entity objects from
+     */
+    protected function setReferencesEntityObjects($entityObject, $jsonData) {
+        // get and set referenced entity objects
+        $entityObject->setDamageType($this->getReferencedEntityObject($jsonData, "damageType", DamageType::entityName()));
+        $entityObject->setManufacturer($this->getReferencedEntityObject($jsonData, "manufacturer", Manufacturer::entityName()));
+        // TODO set as soon as weaponType entity is implemented
+//        $entityObject->setType($this->getValueFromJsonData($jsonData, "type"));
     }
 }

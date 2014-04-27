@@ -45,15 +45,4 @@ abstract class AbstractEntity {
      * @return array associative array containing validation errors (if any).
      */
     public abstract function validate();
-
-//    /**
-//     * @link according to http://stackoverflow.com/a/20268468 doctrine does not serialize referened objects, if they are lazy loaded and have not been loaded.
-//     *
-//     * This method provides a callback to load referenced entity objects which should be considered for JSON serialization.
-//     * Overriding this methods allows implementing subclasses to load referenced objects to make sure those are considered when serializing complex objects trees to JSON.
-//     * For each referenced object to be considered for serialization the getter has to be invoked.
-//     */
-//    public function loadReferencedObjects() {
-//
-//    }
 }

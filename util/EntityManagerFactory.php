@@ -1,7 +1,7 @@
 <?php
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 
 /**

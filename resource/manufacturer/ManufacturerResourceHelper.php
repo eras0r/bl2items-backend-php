@@ -18,12 +18,12 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
     /**
      * Creates a instance of the entity on which this repository is based
      *
-     * @param array $properties array holding the property values for the entity instance to be created.
+     * @param array $jsonData array holding the property values for the entity instance to be created.
      *
      * @return AbstractEntity a new entity object
      */
-    public function createNewEntityInstance(array $properties) {
-        return new Manufacturer($properties);
+    public function createNewEntityInstance(array $jsonData) {
+        return new Manufacturer($jsonData);
     }
 
     /**

@@ -26,11 +26,11 @@ class Weapon extends AbstractEntity {
     protected $damage;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default" = 1})
      * @Serializer\SerializedName("damageMultiplier")
      * @var int
      **/
-    protected $damageMultiplier;
+    protected $damageMultiplier = 1;
 
     /**
      * @ORM\Column(type="decimal")
@@ -68,14 +68,14 @@ class Weapon extends AbstractEntity {
     protected $damageType;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="decimal", nullable=true)
      * @Serializer\SerializedName("elemDamage")
      * @var double
      **/
     protected $elemDamage;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="decimal", nullable=true)
      * @Serializer\SerializedName("elemChance")
      * @var double
      **/
