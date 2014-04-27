@@ -295,6 +295,19 @@ class Weapon extends AbstractEntity {
         if (!isset($this->damageType)) {
             $errors["damageType"] = "Damage type is required";
         }
+
+        // validate elemental damage if necessary
+        if ($this->damageType->getDamageLabel() != null && !isset($this->elemDamage)) {
+            $errors["elemDamage"] = "Elemental damage is required for weapons with damage type '"
+                . $this->damageType->getName() . "'";
+        }
+
+        // validate elemental chance if necessary
+        if ($this->damageType->getChanceLabel() != null && !isset($this->elemChance)) {
+            $errors["elemChance"] = "Elemental chance is required for weapons with damage type '"
+                . $this->damageType->getName() . "'";
+        }
+
         // TODO create weaponType entity
 //        if (!isset($this->type)) {
 //            $errors["type"] = "Type is required";
