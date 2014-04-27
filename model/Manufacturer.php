@@ -2,13 +2,18 @@
 
 require_once 'AbstractEntity.php';
 
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+
+
 /**
- * @Entity @Table(name="manufacturer", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"})})
+ * @ORM\Entity
+ * @ORM\Table(name="manufacturer", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"})})
  **/
 class Manufacturer extends AbstractEntity {
 
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      **/
     protected $name;

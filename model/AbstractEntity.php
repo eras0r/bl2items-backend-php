@@ -1,12 +1,17 @@
 <?php
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Abstract super class for all entities.
+ * @ORM\MappedSuperclass
  */
 abstract class AbstractEntity {
 
     /**
-     * @Id @Column(type="bigint") @GeneratedValue
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue
      * @var int
      **/
     protected $id;
@@ -28,19 +33,10 @@ abstract class AbstractEntity {
         return $this->id;
     }
 
-    /*
-     * Gets the JSON representation of this entity
-     * TODO try using http://jmsyst.com/libs/serializer#documentation instead
-     * TODO add         "jms/serializer-bundle": "dev-master" to composer.json
-     */
-    public function getJson() {
-        return get_object_vars($this);
-    }
-
     /**
      * Gets the entity name for this entity. This is useful for the doctrine entity manager which will use the entity name.
      */
-    public static function getEntityName() {
+    public static function entityName() {
         return get_called_class();
     }
 
@@ -49,4 +45,15 @@ abstract class AbstractEntity {
      * @return array associative array containing validation errors (if any).
      */
     public abstract function validate();
+
+//    /**
+//     * @link according to http://stackoverflow.com/a/20268468 doctrine does not serialize referened objects, if they are lazy loaded and have not been loaded.
+//     *
+//     * This method provides a callback to load referenced entity objects which should be considered for JSON serialization.
+//     * Overriding this methods allows implementing subclasses to load referenced objects to make sure those are considered when serializing complex objects trees to JSON.
+//     * For each referenced object to be considered for serialization the getter has to be invoked.
+//     */
+//    public function loadReferencedObjects() {
+//
+//    }
 }

@@ -2,43 +2,51 @@
 
 require_once 'AbstractEntity.php';
 
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+
 /**
- * @Entity @Table(name="damage_type", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"}), @UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
+ * @ORM\Entity
+ * @ORM\Table(name="damage_type", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"}), @ORM\UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
  **/
 class DamageType extends AbstractEntity {
 
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      **/
     protected $name;
 
     /**
-     * @Column(type="integer")
+     * @ORM\Column(type="integer")
+     * @Serializer\SerializedName("sortOrder")
      * @var int
      **/
     protected $sortOrder;
 
     /**
-     * @Column(type="string", length=7)
+     * @ORM\Column(type="string", length=7)
      * @var string
      **/
     protected $color;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Serializer\SerializedName("damageLabel")
      * @var string
      **/
     protected $damageLabel;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Serializer\SerializedName("chanceLabel")
      * @var string
      **/
     protected $chanceLabel;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Serializer\SerializedName("additionalText")
      * @var string
      **/
     protected $additionalText;

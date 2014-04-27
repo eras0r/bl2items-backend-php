@@ -12,7 +12,7 @@ class DamageTypeResourceHelper extends AbstractResourceHelper {
      * @return string the entity name which belongs to this repository.
      */
     public function getEntityName() {
-        return DamageType::getEntityName();
+        return DamageType::entityName();
     }
 
     /**
@@ -30,7 +30,7 @@ class DamageTypeResourceHelper extends AbstractResourceHelper {
      * Updates the given entity with the values of the given JSON data object
      *
      * @param AbstractEntity $entityObject the entity object to be updated
-     * @param $jsonData mixed the JSON data to be set to the entity object.
+     * @param $jsonData array mixed the JSON data to be set to the entity object.
      */
     public function updateEntityObject(AbstractEntity $entityObject, $jsonData) {
         $entityObject->setName($this->getValueFromJsonData($jsonData, "name"));

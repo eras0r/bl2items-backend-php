@@ -2,25 +2,30 @@
 
 require_once 'AbstractEntity.php';
 
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+
 /**
- * @Entity @Table(name="rarity", uniqueConstraints={@UniqueConstraint(name="unique_name", columns={"name"}), @UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
+ * @ORM\Entity
+ * @ORM\Table(name="rarity", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"}), @ORM\UniqueConstraint(name="unique_sortOrder", columns={"sortOrder"})})
  **/
 class Rarity extends AbstractEntity {
 
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      **/
     protected $name;
 
     /**
-     * @Column(type="string", length=7)
+     * @ORM\Column(type="string", length=7)
      * @var string
      **/
     protected $color;
 
     /**
-     * @Column(type="integer")
+     * @ORM\Column(type="integer")
+     * @Serializer\SerializedName("sortOrder")
      * @var int
      **/
     protected $sortOrder;

@@ -35,6 +35,10 @@ try {
     $response = new Response(Response::UNAUTHORIZED, 'Unauthorized');
     $response->wwwAuthenticate = 'Basic realm="My Realm"';
 } catch (\Exception $e) {
+    // show exception in debug mode
+    if (DEBUG_MODE == true) {
+        echo $e;
+    }
     $response = new Response(Response::INTERNALSERVERERROR, 'Server error');
 }
 

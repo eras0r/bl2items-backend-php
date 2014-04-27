@@ -2,9 +2,11 @@
 
 require_once 'include/config.php';
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use JMS\Serializer\SerializerBuilder;
 use Tonic\Application;
 use Tonic\Request;
 use Tonic\Resource;
@@ -56,7 +58,8 @@ abstract class AbstractEntityResource extends Resource {
         if (!isset($this->entityManager)) {
             // Create a simple "default" Doctrine ORM configuration for Annotations
             $isDevMode = true;
-            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/model"), $isDevMode);
+            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/model"), $isDevMode, null, null, false);
+            AnnotationRegistry::registerAutoloadNamespace('JMS\Serializer\Annotation', __DIR__ . "/../vendor/jms/serializer/src");
 
             // the connection configuration
             $conn = array(
@@ -90,5 +93,18 @@ abstract class AbstractEntityResource extends Resource {
      */
     protected function getResourceHelper() {
         return $this->resourceHelper;
+    }
+
+    /**
+     * Serializes the given object
+     *
+     * @param $data mixed the object to be serialized
+     * @param $format string the format to be used for serialization (defaults to json).
+     *
+     * @return mixed the serialized object
+     */
+    protected function serialize($data, $format = 'json') {
+        $serializer = SerializerBuilder::create()->build();
+        return $serializer->serialize($data, $format);
     }
 }

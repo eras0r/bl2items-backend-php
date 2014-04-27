@@ -39,7 +39,7 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
             try {
                 $this->getEntityManager()->persist($entityInstance);
                 $this->getEntityManager()->flush();
-                return new Response(Response::CREATED, json_encode($entityInstance->getJson()));
+                return new Response(Response::CREATED, $this->serialize($entityInstance));
             } catch (DBALException $e) {
                 return $this->handleUniqueKeyException($e);
             }
@@ -54,13 +54,8 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
      */
     public function getAll() {
         $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
-        $entityObjects = array();
-
-        foreach ($repository->findBy($this->getCriteria(), $this->getSortOrders()) as $m) {
-            $entityObjects[] = $m->getJson();
-        }
-
-        return json_encode($entityObjects);
+        $result = $repository->findBy($this->getCriteria(), $this->getSortOrders());
+        return $this->serialize($result);
     }
 
     protected function getCriteria() {

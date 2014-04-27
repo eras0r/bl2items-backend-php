@@ -12,7 +12,7 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
      * @return string the entity name which belongs to this repository.
      */
     public function getEntityName() {
-        return Manufacturer::getEntityName();
+        return Manufacturer::entityName();
     }
 
     /**
@@ -30,7 +30,7 @@ class ManufacturerResourceHelper extends AbstractResourceHelper {
      * Updates the given entity with the values of the given JSON data object
      *
      * @param AbstractEntity $entityObject the entity object to be updated
-     * @param $jsonData mixed the JSON data to be set to the entity object.
+     * @param $jsonData array the JSON data to be set to the entity object.
      */
     public function updateEntityObject(AbstractEntity $entityObject, $jsonData) {
         $entityObject->setName($this->getValueFromJsonData($jsonData, "name"));

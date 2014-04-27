@@ -7,19 +7,6 @@ use Tonic\Application;
 use Tonic\Request;
 use Tonic\Response;
 
-class EntityObjectValidationException extends Exception {
-
-    private $validationErrors;
-
-    function __construct($validationErrors) {
-        $this->validationErrors = $validationErrors;
-    }
-
-    public function getValidationErrors() {
-        return $this->validationErrors;
-    }
-}
-
 /**
  * Abstract super class for all RESTful resources which are based on a single object of an entity.
  */
@@ -43,7 +30,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      */
     public function display() {
         $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
-        return json_encode($entityObj->getJson());
+        return $this->serialize($entityObj);
     }
 
     /**

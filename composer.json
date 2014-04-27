@@ -1,6 +1,7 @@
 {
     "require": {
         "peej/tonic": "dev-master",
-        "doctrine/orm": "2.4.*"
+        "doctrine/orm": "2.4.*",
+        "jms/serializer-bundle": "dev-master"
     }
 }

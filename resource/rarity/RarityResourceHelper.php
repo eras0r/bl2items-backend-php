@@ -12,7 +12,7 @@ class RarityResourceHelper extends AbstractResourceHelper {
      * @return string the entity name which belongs to this repository.
      */
     public function getEntityName() {
-        return Rarity::getEntityName();
+        return Rarity::entityName();
     }
 
     /**
@@ -30,7 +30,7 @@ class RarityResourceHelper extends AbstractResourceHelper {
      * Updates the given entity with the values of the given JSON data object
      *
      * @param AbstractEntity $entityObject the entity object to be updated
-     * @param $jsonData the JSON data to be set to the entity object.
+     * @param $jsonData array the JSON data to be set to the entity object.
      *
      * @return mixed AbstractEntity the updated entity object
      */
