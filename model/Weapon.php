@@ -14,6 +14,12 @@ use JMS\Serializer\Annotation as Serializer;
 class Weapon extends AbstractEntity {
 
     /**
+     * @ORM\Column(type="integer")
+     * @var string
+     **/
+    protected $level;
+
+    /**
      * @ORM\Column(type="string")
      * @var string
      **/
@@ -92,12 +98,33 @@ class Weapon extends AbstractEntity {
     protected $manufacturer;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Rarity")
+     * @ORM\JoinColumn(name="rarity_id", nullable=false)
+     * @var Rarity
+     */
+    protected $rarity;
+
+    /**
      * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
      *
      * @param array $data associative array holding the properties for the manufacturer.
      */
     public function __construct(array $data) {
         parent::__construct($data);
+    }
+
+    /**
+     * @param string $level
+     */
+    public function setLevel($level) {
+        $this->level = $level;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLevel() {
+        return $this->level;
     }
 
     /**
@@ -266,6 +293,20 @@ class Weapon extends AbstractEntity {
      */
     public function getType() {
         return $this->type;
+    }
+
+    /**
+     * @param \Rarity $rarity
+     */
+    public function setRarity($rarity) {
+        $this->rarity = $rarity;
+    }
+
+    /**
+     * @return \Rarity
+     */
+    public function getRarity() {
+        return $this->rarity;
     }
 
     /**
