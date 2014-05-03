@@ -105,6 +105,20 @@ class Weapon extends AbstractEntity {
     protected $rarity;
 
     /**
+     * @ORM\Column(type="string")
+     * @Serializer\SerializedName("uniqueText")
+     * @var string
+     **/
+    protected $uniqueText;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Serializer\SerializedName("additionalText")
+     * @var string
+     **/
+    protected $additionalText;
+
+    /**
      * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
      *
      * @param array $data associative array holding the properties for the manufacturer.
@@ -307,6 +321,34 @@ class Weapon extends AbstractEntity {
      */
     public function getRarity() {
         return $this->rarity;
+    }
+
+    /**
+     * @param string $additionalText
+     */
+    public function setAdditionalText($additionalText) {
+        $this->additionalText = $additionalText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalText() {
+        return $this->additionalText;
+    }
+
+    /**
+     * @param string $uniqueText
+     */
+    public function setUniqueText($uniqueText) {
+        $this->uniqueText = $uniqueText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueText() {
+        return $this->uniqueText;
     }
 
     /**
