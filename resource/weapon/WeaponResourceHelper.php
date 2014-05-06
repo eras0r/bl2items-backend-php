@@ -3,6 +3,7 @@
 require_once 'model/Weapon.php';
 require_once 'model/DamageType.php';
 require_once 'model/Manufacturer.php';
+require_once 'model/Rarity.php';
 
 /**
  * Resource helper class for the {@link Weapon} entity.
@@ -77,6 +78,7 @@ class WeaponResourceHelper extends AbstractResourceHelper {
         // get and set referenced entity objects
         $entityObject->setDamageType($this->getReferencedEntityObject($jsonData, "damageType", DamageType::entityName()));
         $entityObject->setManufacturer($this->getReferencedEntityObject($jsonData, "manufacturer", Manufacturer::entityName()));
+        $entityObject->setRarity($this->getReferencedEntityObject($jsonData, "rarity", Rarity::entityName()));
         // TODO set as soon as weaponType entity is implemented
 //        $entityObject->setType($this->getValueFromJsonData($jsonData, "type"));
     }
