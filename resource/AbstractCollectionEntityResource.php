@@ -62,28 +62,4 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
         // TODO parse other GET parameters than "sort"
         return array();
     }
-
-    /**
-     * Gets the sort order based on the GET parameter named "sort".
-     * There can be multiple sort order parameters separated by comma ",".
-     * If the parameter start with a "-" this means this parameter will be sorted in descending order.
-     * @return array the sort order array as used by the doctrine repository (the key is the name of the property
-     * to be sorted, the value if either "asc" or "desc".
-     */
-    protected function getSortOrders() {
-        // parse sort order
-        if (isset($_GET["sort"])) {
-            $sortOrders = array();
-            foreach (explode(",", $_GET["sort"]) as $value) {
-                if (strpos($value, "-") === 0) {
-                    $sortOrders[substr($value, 1)] = "desc";
-                } else {
-                    $sortOrders[$value] = "asc";
-                }
-            }
-            return $sortOrders;
-        } else {
-            return array();
-        }
-    }
 }
