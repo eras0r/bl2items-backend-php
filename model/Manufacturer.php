@@ -19,13 +19,6 @@ class Manufacturer extends AbstractEntity {
     protected $name;
 
     /**
-     * Bidirectional - One-To-Many (INVERSE SIDE)
-     * @ORM\OneToMany(targetEntity="Weapon", mappedBy="manufacturer")
-     * @Serializer\Exclude
-     */
-    private $weapons;
-
-    /**
      * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
      *
      * @param array $data associative array holding the properties for the manufacturer.
@@ -49,13 +42,6 @@ class Manufacturer extends AbstractEntity {
      */
     public function setName($name) {
         $this->name = $name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWeapons() {
-        return $this->weapons;
     }
 
     /**

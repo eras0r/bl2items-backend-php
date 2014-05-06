@@ -1,7 +1,6 @@
 <?php
 
-require_once 'AbstractEntity.php';
-require_once 'Manufacturer.php';
+require_once 'AbstractItem.php';
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
@@ -9,21 +8,9 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * Entity object representing a weapon.
  * @ORM\Entity
- * @ORM\Table(name="weapon", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"})})
+ * @ORM\Table(name="weapon")
  */
-class Weapon extends AbstractEntity {
-
-    /**
-     * @ORM\Column(type="integer")
-     * @var string
-     **/
-    protected $level;
-
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     **/
-    protected $name;
+class Weapon extends AbstractItem {
 
     /**
      * @ORM\Column(type="decimal")
@@ -91,54 +78,12 @@ class Weapon extends AbstractEntity {
     protected $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Manufacturer", inversedBy="weapons")
-     * @ORM\JoinColumn(name="manufacturer_id", nullable=false)
-     * @var Manufacturer
-     */
-    protected $manufacturer;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Rarity")
-     * @ORM\JoinColumn(name="rarity_id", nullable=false)
-     * @var Rarity
-     */
-    protected $rarity;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Serializer\SerializedName("uniqueText")
-     * @var string
-     **/
-    protected $uniqueText;
-
-    /**
-     * @ORM\Column(type="text")
-     * @Serializer\SerializedName("additionalText")
-     * @var string
-     **/
-    protected $additionalText;
-
-    /**
-     * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
+     * Creates a new weapon by initializing is properties by using the values given in the associative array.
      *
-     * @param array $data associative array holding the properties for the manufacturer.
+     * @param array $data associative array holding the properties for the weapon.
      */
     public function __construct(array $data) {
         parent::__construct($data);
-    }
-
-    /**
-     * @param string $level
-     */
-    public function setLevel($level) {
-        $this->level = $level;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLevel() {
-        return $this->level;
     }
 
     /**
@@ -254,34 +199,6 @@ class Weapon extends AbstractEntity {
     }
 
     /**
-     * @param \Manufacturer $manufacturer
-     */
-    public function setManufacturer($manufacturer) {
-        $this->manufacturer = $manufacturer;
-    }
-
-    /**
-     * @return \Manufacturer
-     */
-    public function getManufacturer() {
-        return $this->manufacturer;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName() {
-        return $this->name;
-    }
-
-    /**
      * @param float $reloadSpeed
      */
     public function setReloadSpeed($reloadSpeed) {
@@ -310,56 +227,13 @@ class Weapon extends AbstractEntity {
     }
 
     /**
-     * @param \Rarity $rarity
-     */
-    public function setRarity($rarity) {
-        $this->rarity = $rarity;
-    }
-
-    /**
-     * @return \Rarity
-     */
-    public function getRarity() {
-        return $this->rarity;
-    }
-
-    /**
-     * @param string $additionalText
-     */
-    public function setAdditionalText($additionalText) {
-        $this->additionalText = $additionalText;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAdditionalText() {
-        return $this->additionalText;
-    }
-
-    /**
-     * @param string $uniqueText
-     */
-    public function setUniqueText($uniqueText) {
-        $this->uniqueText = $uniqueText;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUniqueText() {
-        return $this->uniqueText;
-    }
-
-    /**
      * Validates the entity and returns an array containing validation errors (if any).
      * @return array associative array containing validation errors (if any).
      */
     public function validate() {
-        $errors = array();
-        if (empty($this->name)) {
-            $errors["name"] = "Name is required";
-        }
+        // validate super class
+        $errors = parent::validate();
+
         if (empty($this->damage)) {
             $errors["damage"] = "Damage is required";
         }
@@ -395,9 +269,7 @@ class Weapon extends AbstractEntity {
 //        if (!isset($this->type)) {
 //            $errors["type"] = "Type is required";
 //        }
-        if (!isset($this->manufacturer)) {
-            $errors["manufacturer"] = "Manufacturer is required";
-        }
+
         return $errors;
     }
 }
