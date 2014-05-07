@@ -2,22 +2,31 @@
 
 require_once 'AbstractEntity.php';
 require_once 'Manufacturer.php';
+require_once 'Weapon.php';
+require_once 'Shield.php';
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * Abstract superclass for all item entity objects.
+ * Abstract superclass for all item entity objects. This class is not extending {@link AbstractEntity} because
+ * otherwise the discriminator won't be serialized to JSON.
  * @ORM\Entity
  * @ORM\Table(name="abstract_item", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"})})
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="itemType", type="string")
  * @ORM\DiscriminatorMap({"weapon" = "Weapon", "shield" = "Shield"})
+ * @Serializer\Discriminator(field = "itemType", map = {"weapon": "Weapon", "shield": "Shield"})
  */
-abstract class AbstractItem extends AbstractEntity {
+abstract class AbstractItem {
 
-    // TODO needed to determine between concrete instances?
-//    protected $type;
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue
+     * @var int
+     **/
+    protected $id;
 
     /**
      * @ORM\Column(type="integer")
@@ -65,7 +74,26 @@ abstract class AbstractItem extends AbstractEntity {
      * @param array $data associative array holding the properties for the manufacturer.
      */
     public function __construct(array $data) {
-        parent::__construct($data);
+        foreach ($data as $key => $val) {
+            if (property_exists(get_class($this), $key) && $key != "id") {
+                $this->$key = $val;
+            }
+        }
+    }
+
+    /**
+     * Gets the entity name for this entity. This is useful for the doctrine entity manager which will use the entity name.
+     */
+    public static function entityName() {
+        return get_called_class();
+    }
+
+    /**
+     * Gets the id.
+     * @return int the id
+     */
+    public function getId() {
+        return $this->id;
     }
 
     /**
