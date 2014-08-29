@@ -41,7 +41,7 @@ abstract class AbstractItem {
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Manufacturer", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Manufacturer")
      * @ORM\JoinColumn(name="manufacturer_id", nullable=false)
      * @var Manufacturer
      */
@@ -85,6 +85,8 @@ abstract class AbstractItem {
      * Gets the entity name for this entity. This is useful for the doctrine entity manager which will use the entity name.
      */
     public static function entityName() {
+        echo "dini mueter";
+        echo get_called_class();
         return get_called_class();
     }
 
