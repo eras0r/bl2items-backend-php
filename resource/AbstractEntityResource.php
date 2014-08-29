@@ -20,7 +20,7 @@ abstract class AbstractEntityResource extends Resource {
     const UNPROCESSABLE_ENTITY = 422;
 
     /**
-     * @var AbstractResourceHelper the resource hellper
+     * @var AbstractResourceHelper the resource helper
      */
     private $resourceHelper;
 
