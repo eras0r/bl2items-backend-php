@@ -30,7 +30,7 @@ abstract class AbstractItem {
 
     /**
      * @ORM\Column(type="integer")
-     * @var string
+     * @var int
      **/
     protected $level;
 
