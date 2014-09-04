@@ -53,6 +53,7 @@ abstract class AbstractCollectionEntityResource extends AbstractEntityResource {
      * @provides application/json
      */
     public function getAll() {
+        $this->checkHmacHash();
         $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
         $result = $repository->findBy($this->getCriteria(), $this->getSortOrders());
         return $this->serialize($result);

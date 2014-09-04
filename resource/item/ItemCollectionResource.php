@@ -32,6 +32,8 @@ class ItemCollectionResource extends AbstractEntityResource {
      * @provides application/json
      */
     public function getAll() {
+        $this->checkHmacHash();
+
         $enityName = "abstractItem";
 
         // TODO check given GET parameter

@@ -85,8 +85,6 @@ abstract class AbstractItem {
      * Gets the entity name for this entity. This is useful for the doctrine entity manager which will use the entity name.
      */
     public static function entityName() {
-        echo "dini mueter";
-        echo get_called_class();
         return get_called_class();
     }
 

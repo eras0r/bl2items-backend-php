@@ -1,6 +1,7 @@
 <?php
 
 require_once 'include/config.php';
+require_once 'util/HmacHashCalculator.php';
 
 use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializerBuilder;
@@ -25,6 +26,11 @@ abstract class AbstractEntityResource extends Resource {
     private $resourceHelper;
 
     /**
+     * @var HmacHashCalculator
+     */
+    private $hmacCalculator;
+
+    /**
      * Constructor used by tonic.
      *
      * @param Tonic\Application $app
@@ -34,6 +40,7 @@ abstract class AbstractEntityResource extends Resource {
     function __construct(Application $app, Request $request, AbstractResourceHelper $resourceHelper) {
         parent::__construct($app, $request);
         $this->resourceHelper = $resourceHelper;
+        $this->hmacCalculator = new HmacHashCalculator();
     }
 
     /**
@@ -48,6 +55,14 @@ abstract class AbstractEntityResource extends Resource {
 
     protected function getEntityManager() {
         return $this->getResourceHelper()->getEntityManager();
+    }
+
+    /**
+     * Checks the HMAC hash for the current HTTP request.
+     * @throws UnauthorizedException in case the HMAC hash is invalid.
+     */
+    protected function checkHmacHash() {
+        return $this->hmacCalculator->checkHmacHash();
     }
 
     protected function handleUniqueKeyException(DBALException $e) {

@@ -29,6 +29,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      * @provides application/json
      */
     public function display() {
+        $this->checkHmacHash();
         $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
         return $this->serialize($entityObj);
     }
@@ -38,6 +39,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      * @method DELETE
      */
     public function remove() {
+        $this->checkHmacHash();
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
         $this->getEntityManager()->remove($entityObject);
         $this->getEntityManager()->flush();
@@ -51,6 +53,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
      * @provides application/json
      */
     public function update() {
+        $this->checkHmacHash();
         $jsonData = json_decode($this->request->data, true);
         /* @var $entityObject AbstractEntity */
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $this->id);
