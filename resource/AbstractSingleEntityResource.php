@@ -12,6 +12,8 @@ use Tonic\Response;
  */
 abstract class AbstractSingleEntityResource extends AbstractEntityResource {
 
+    const UNPROCESSABLE_ENTITY = 422;
+
     /**
      * Constructor used by tonic.
      *
@@ -68,7 +70,7 @@ abstract class AbstractSingleEntityResource extends AbstractEntityResource {
                 return $this->handleUniqueKeyException($e);
             }
         } else {
-            return new Response(Response::NOTACCEPTABLE, json_encode($errors));
+            return new Response(self::UNPROCESSABLE_ENTITY, json_encode($errors));
         }
     }
 }
