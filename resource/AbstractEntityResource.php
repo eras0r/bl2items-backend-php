@@ -40,7 +40,7 @@ abstract class AbstractEntityResource extends Resource {
     function __construct(Application $app, Request $request, AbstractResourceHelper $resourceHelper) {
         parent::__construct($app, $request);
         $this->resourceHelper = $resourceHelper;
-        $this->hmacCalculator = new HmacHashCalculator();
+        $this->hmacCalculator = new HmacHashCalculator($request->data);
     }
 
     /**

@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") {
 
 try {
 
-    // TODO check HMAC hash for logout
-//    $hmacHashCalculator = new HmacHashCalculator();
-//    $hmacHashCalculator->checkHmacHash();
-
     $jsonData = file_get_contents('php://input');
     $requestBody = json_decode($jsonData);
+
+    // TODO check HMAC hash for logout
+//    $hmacHashCalculator = new HmacHashCalculator($jsonData);
+//    $hmacHashCalculator->checkHmacHash();
 
     if (!isset($_SERVER["HTTP_X_SESSION_TOKEN"])) {
         throw new BadRequestException("HTTP_X_SESSION_TOKEN must be set.");

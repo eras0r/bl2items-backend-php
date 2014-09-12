@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") {
 
 try {
 
-    // TODO check HMAC hash for login
-//    $hmacHashCalculator = new HmacHashCalculator();
-//    $hmacHashCalculator->checkHmacHash();
-
     $jsonData = file_get_contents('php://input');
     $requestBody = json_decode($jsonData);
+
+    // TODO check HMAC hash for login
+//    $hmacHashCalculator = new HmacHashCalculator($jsonData);
+//    $hmacHashCalculator->checkHmacHash();
 
     $login = new LoginController();
 

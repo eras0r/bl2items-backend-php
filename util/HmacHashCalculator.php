@@ -18,12 +18,12 @@ class HmacHashCalculator {
 
     private $sentHmacHash;
 
-    function __construct() {
+    function __construct($data) {
         $this->entityManager = EntityManagerFactory::getEntityManager();
 
         $this->url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        $this->data = file_get_contents('php://input');
+        $this->data = $data;
     }
 
     private function initCustomHeaders() {
