@@ -10,8 +10,8 @@ use Tonic\Request;
 /**
  * This class defines the resource which will provide a RESTful interface for all operations
  * based on collections of the {@link DamageType} entity. @class DamageType
- * @uri /damageTypes
- * @uri /damageTypes/
+ * @uri /damage-types
+ * @uri /damage-types/
  */
 class DamageTypeCollectionResource extends AbstractCollectionEntityResource {
 
