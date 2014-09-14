@@ -1,6 +1,6 @@
 <?php
 
-namespace Bl2\Service\Foo;
+namespace Bl2\Service\Rest;
 
 use Bl2\Exception\BadRequestException;
 use Bl2\Exception\UnauthorizedException;

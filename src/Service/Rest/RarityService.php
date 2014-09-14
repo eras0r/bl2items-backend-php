@@ -1,6 +1,6 @@
 <?php
 
-namespace Bl2\Service\Foo;
+namespace Bl2\Service\Rest;
 
 use Bl2\Service\AbstractEntity;
 use Bl2\Service\AbstractEntityResource;

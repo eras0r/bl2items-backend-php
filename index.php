@@ -34,7 +34,7 @@ $app = new Spore($sporeConfig);
 
 // scan recursively for services
 // TODO find a better way than Foo for the directory :-)
-$app->addServicesDirectory("src/Service/Foo/", 'Bl2\Service\Foo');
+$app->addServicesDirectory("src/Service/Rest/", 'Bl2\Service\Rest');
 
 // override error handler
 $app->error(function (Exception $e) use ($app) {
