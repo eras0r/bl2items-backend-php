@@ -24,6 +24,7 @@ class RarityService extends AbstractRestService {
      * Gets all rarities.
      * @url /rarities/
      * @verbs GET
+     * @auth admin
      *
      * @param Request $request
      *
@@ -51,6 +52,7 @@ class RarityService extends AbstractRestService {
      * Creates a new rarity.
      * @url /rarities/
      * @verbs POST
+     * @auth admin
      *
      * @param Request $request
      *

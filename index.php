@@ -8,6 +8,7 @@ use Bl2\Exception\EntityObjectValidationException;
 use Bl2\Exception\NotFoundException;
 use Bl2\Exception\UnauthorizedException;
 use Bl2\Exception\UniqueKeyConstraintException;
+use Bl2\Util\HmacHashCalculator;
 use Spore\ReST\Model\Status;
 use Spore\Spore;
 
@@ -54,6 +55,21 @@ $app->error(function (Exception $e) use ($app) {
 
     // delegate to default spore error handler
     $app->errorHandler($e);
+});
+
+$app->authCallback(function ($requiredRoles) use ($app) {
+    // skip authorization check if @auth annotation is not present or empty
+    if (empty($requiredRoles)) {
+        return true;
+    }
+
+    $hmacCalculator = new HmacHashCalculator();
+    $hmacCalculator->checkHmacHash($app->request()->getBody());
+
+    // TODO get the user's current roles from the database
+    $currentRoles = array("admin", "user");
+
+    return count(array_intersect($requiredRoles, $currentRoles)) > 0;
 });
 
 $app->run();

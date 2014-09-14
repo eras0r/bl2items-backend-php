@@ -37,7 +37,7 @@ abstract class AbstractRestService {
      * Gets a list containing all objects of the entity this resource is based on.
      */
     public function getAll(Request $request) {
-        $this->checkHmacHash($request->data);
+//        $this->checkHmacHash($request->data);
         $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
         $result = $repository->findBy($this->getCriteria(), $this->getSortOrders());
         return $result;
@@ -47,7 +47,7 @@ abstract class AbstractRestService {
      * Gets a single entity object.
      */
     public function get(Request $request, $id) {
-        $this->checkHmacHash($request->data);
+//        $this->checkHmacHash($request->data);
         $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
         if ($entityObj == null) {
             throw new NotFoundException("No instance for entity '" . $this->getResourceHelper()->getEntityName() . "' found for id '$id'");
@@ -63,7 +63,7 @@ abstract class AbstractRestService {
      * @return Response
      */
     public function add(Request $request) {
-        $this->checkHmacHash($request->data);
+//        $this->checkHmacHash($request->data);
         // cast stdClass to array
         $properties = (array)$request->data;
         $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
@@ -83,8 +83,7 @@ abstract class AbstractRestService {
      * Updates a single entity object.
      */
     public function update(Request $request) {
-        $this->checkHmacHash($request->data);
-
+//        $this->checkHmacHash($request->data);
         $id = $request->params['id'];
         // cast stdClass to array
         $jsonData = (array)$request->data;
@@ -107,8 +106,7 @@ abstract class AbstractRestService {
      * Deletes a single entity object.
      */
     public function remove(Request $request) {
-        $this->checkHmacHash($request->data);
-
+//        $this->checkHmacHash($request->data);
         $id = $request->params['id'];
 
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
@@ -121,16 +119,16 @@ abstract class AbstractRestService {
         return $this->getResourceHelper()->getEntityManager();
     }
 
-    /**
-     * Checks the HMAC hash for the current HTTP request.
-     *
-     * @param $data stdClass|array The deserialized request body
-     *
-     * @throws UnauthorizedException in case the HMAC hash is invalid.
-     */
-    protected function checkHmacHash($data) {
-        return $this->hmacCalculator->checkHmacHash($data);
-    }
+//    /**
+//     * Checks the HMAC hash for the current HTTP request.
+//     *
+//     * @param $data stdClass|array The deserialized request body
+//     *
+//     * @throws UnauthorizedException in case the HMAC hash is invalid.
+//     */
+//    protected function checkHmacHash($data) {
+//        return $this->hmacCalculator->checkHmacHash($data);
+//    }
 
     protected function handleUniqueKeyException(DBALException $e) {
         $errors = array();
