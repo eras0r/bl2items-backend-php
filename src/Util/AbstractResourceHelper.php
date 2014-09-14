@@ -1,6 +1,6 @@
 <?php
 
-namespace Bl2\Service;
+namespace Bl2\Util;
 
 use Bl2\Model\AbstractEntity;
 use Bl2\Util\EntityManagerFactory;

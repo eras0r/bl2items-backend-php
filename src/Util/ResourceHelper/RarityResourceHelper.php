@@ -1,10 +1,10 @@
 <?php
 
-namespace Bl2\Service\Rarity;
+namespace Bl2\Util\ResourceHelper;
 
 use Bl2\Model\AbstractEntity;
 use Bl2\Model\Rarity;
-use Bl2\Service\AbstractResourceHelper;
+use Bl2\Util\AbstractResourceHelper;
 
 /**
  * Resource helper class for the {@link Rarity} entity.

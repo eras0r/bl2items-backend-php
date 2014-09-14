@@ -44,7 +44,7 @@ abstract class AbstractEntity {
 
     /**
      * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
+     * @throws \Bl2\Exception\EntityObjectValidationException in case of validation exceptions
      */
     public abstract function validate();
 }

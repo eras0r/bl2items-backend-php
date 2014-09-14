@@ -4,6 +4,11 @@ require_once 'vendor/autoload.php';
 
 require_once 'config.php';
 
+use Bl2\Exception\EntityObjectValidationException;
+use Bl2\Exception\NotFoundException;
+use Bl2\Exception\UnauthorizedException;
+use Bl2\Exception\UniqueKeyConstraintException;
+use Spore\ReST\Model\Status;
 use Spore\Spore;
 
 // TODO introduce setupHeaders(boolean useCors) method
@@ -17,21 +22,9 @@ header('Access-Control-Request-Method: *');
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With, X-MICRO-TIME, X-SESSION-TOKEN, X-HMAC-HASH, X-URL");
 
-// FIXME remove tonic stuff
-//try {
-//    $app = new Application(array(
-//        'load' => array('resource/*.php',
-//            'load' => 'resource/*/*.php')
-//    ));
-//
-//    $request = new Request();
-//
-//    $resource = $app->getResource($request);
-//    $response = $resource->exec();
-
 $sporeConfig = array(
     "include-examples" => false,
-    "debug" => DEBUG_MODE,
+    "debug" => false, // debug false, otherwise exception handling won't work properly
     "serializers" => array(
         "application/json" => '\Bl2\Util\JsonSerializer'
     )
@@ -40,29 +33,27 @@ $sporeConfig = array(
 $app = new Spore($sporeConfig);
 
 // scan recursively for services
-//$app->addServicesDirectory("src/service/");
-//$app->addService(new \Bl2\Service\Item\ItemService($app->request()));
-$app->addService(new \Bl2\Service\Rarity\RarityService());
+// TODO find a better way than Foo for the directory :-)
+$app->addServicesDirectory("src/Service/Foo/", 'Bl2\Service\Foo');
 
-//$app->get("/", function () {
-//    return array("message" => "Hello World from Spore");
-//});
+// override error handler
+$app->error(function (Exception $e) use ($app) {
+    // handle not found exception
+    if ($e instanceof NotFoundException) {
+        $app->halt(Status::NOT_FOUND, $e->getMessage());
+    } else if ($e instanceof UnauthorizedException) {
+        // TODO give a better hint than just the "Unauthorized" text
+        $app->halt(Status::UNAUTHORIZED, "Unauthorized");
+    } else if ($e instanceof EntityObjectValidationException) {
+        // TODO give a better hint than just the "Unauthorized" text
+        $app->halt(Status::UNPROCESSABLE_ENTITY, json_encode($e->getValidationErrors()));
+    } else if ($e instanceof UniqueKeyConstraintException) {
+        // TODO give a better hint than just the "Unauthorized" text
+        $app->halt(Status::UNPROCESSABLE_ENTITY, json_encode($e->getConstraintViolations()));
+    }
+
+    // delegate to default spore error handler
+    $app->errorHandler($e);
+});
 
 $app->run();
-
-
-// FIXME remove tonic stuff
-//} catch (NotFoundException $e) {
-//    $response = new Response(Response::NOTFOUND, 'Not found');
-//} catch (UnauthorizedException $e) {
-//    $response = new Response(Response::UNAUTHORIZED, 'Unauthorized');
-////    $response->wwwAuthenticate = 'Basic realm="My Realm"';
-//} catch (\Exception $e) {
-//    // show exception in debug mode
-//    if (DEBUG_MODE == true) {
-//        echo $e;
-//    }
-//    $response = new Response(Response::INTERNALSERVERERROR, 'Server error');
-//}
-//
-//$response->output();

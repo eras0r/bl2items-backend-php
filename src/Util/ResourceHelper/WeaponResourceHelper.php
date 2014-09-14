@@ -1,6 +1,6 @@
 <?php
 
-namespace Bl2\Service\Weapon;
+namespace Bl2\Util\ResourceHelper;
 
 use Bl2\Model\AbstractEntity;
 use Bl2\Model\DamageType;

@@ -43,7 +43,8 @@ class HmacHashCalculator {
 
     private function calculateHmacHash($data, $secret) {
         $this->initCustomHeaders();
-        return hash_hmac("sha512", $this->url . ":" . $data . ":" . $this->microTime, $secret);
+        $jsonData = isset($data) ? json_encode($data) : "";
+        return hash_hmac("sha512", $this->url . ":" . $jsonData . ":" . $this->microTime, $secret);
     }
 
     /**
@@ -54,9 +55,6 @@ class HmacHashCalculator {
      * @throws UnauthorizedException in case the HMAC hash is invalid.
      */
     public function checkHmacHash($data) {
-        return;
-
-        // FIXME use the code below
         $this->initCustomHeaders();
 
         // check if SessionToken $this->sessionToken  exists
@@ -68,11 +66,6 @@ class HmacHashCalculator {
         $secret = $sessionToken->getSecret();
 
         $generatedHmacHash = $this->calculateHmacHash($data, $secret);
-
-//        if (DEBUG_MODE == true) {
-//            echo "got hmac hash = " . $this->sentHmacHash . " < br />\n";
-//            echo "exp hmac hash = " . $generatedHmacHash . " < br />\n";
-//        }
 
         if ($generatedHmacHash != $this->sentHmacHash) {
             throw new UnauthorizedException();

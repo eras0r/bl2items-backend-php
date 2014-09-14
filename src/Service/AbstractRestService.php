@@ -2,6 +2,9 @@
 
 namespace Bl2\Service;
 
+use Bl2\Exception\NotFoundException;
+use Bl2\Exception\UniqueKeyConstraintException;
+use Bl2\Util\AbstractResourceHelper;
 use Bl2\Util\HmacHashCalculator;
 use Doctrine\DBAL\DBALException;
 use Spore\ReST\Model\Request;
@@ -10,11 +13,6 @@ use Spore\ReST\Model\Request;
  * Abstract super class for REST services.
  */
 abstract class AbstractRestService {
-
-    /**
-     * HTTP status code used for validation errors
-     */
-    const UNPROCESSABLE_ENTITY = 422;
 
     /**
      * @var AbstractResourceHelper the resource helper
@@ -31,8 +29,8 @@ abstract class AbstractRestService {
      */
     function __construct(AbstractResourceHelper $resourceHelper) {
         $this->resourceHelper = $resourceHelper;
-        // TODO use dependency injection for HmacHashCalculator
-        $this->hmacCalculator = new HmacHashCalculator(null);
+        // TODO use dependency injection
+        $this->hmacCalculator = new HmacHashCalculator();
     }
 
     /**
@@ -51,6 +49,9 @@ abstract class AbstractRestService {
     public function get(Request $request, $id) {
         $this->checkHmacHash($request->data);
         $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
+        if ($entityObj == null) {
+            throw new NotFoundException("No instance for entity '" . $this->getResourceHelper()->getEntityName() . "' found for id '$id'");
+        }
         return $entityObj;
     }
 
@@ -67,17 +68,14 @@ abstract class AbstractRestService {
         $properties = (array)$request->data;
         $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
 
-        $errors = $entityInstance->validate();
-        if (!empty($errors)) {
-            return new Response(AbstractEntityResource::UNPROCESSABLE_ENTITY, json_encode($errors));
-        } else {
-            try {
-                $this->getEntityManager()->persist($entityInstance);
-                $this->getEntityManager()->flush();
-                return new Response(Response::CREATED, $this->serialize($entityInstance));
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
+        $entityInstance->validate();
+
+        try {
+            $this->getEntityManager()->persist($entityInstance);
+            $this->getEntityManager()->flush();
+            return $entityInstance;
+        } catch (DBALException $e) {
+            return $this->handleUniqueKeyException($e);
         }
     }
 
@@ -94,17 +92,14 @@ abstract class AbstractRestService {
         /* @var $entityObject AbstractEntity */
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
         $this->getResourceHelper()->updateEntityObject($entityObject, $jsonData);
-        $errors = $entityObject->validate();
-        if (empty($errors)) {
-            try {
-                $this->getEntityManager()->persist($entityObject);
-                $this->getEntityManager()->flush();
-                return $this->get($request, $id);
-            } catch (DBALException $e) {
-                return $this->handleUniqueKeyException($e);
-            }
-        } else {
-            return new Response(self::UNPROCESSABLE_ENTITY, json_encode($errors));
+        $entityObject->validate();
+
+        try {
+            $this->getEntityManager()->persist($entityObject);
+            $this->getEntityManager()->flush();
+            return $this->get($request, $id);
+        } catch (DBALException $e) {
+            return $this->handleUniqueKeyException($e);
         }
     }
 
@@ -145,7 +140,7 @@ abstract class AbstractRestService {
                 $errors[$constraintName] = "Already exists!";
             }
         }
-        return new Response(AbstractRestService::UNPROCESSABLE_ENTITY, json_encode($errors));
+        throw new UniqueKeyConstraintException($errors);
     }
 
     /**

@@ -1,11 +1,12 @@
 <?php
 
-namespace Bl2\Service\Rarity;
+namespace Bl2\Service\Foo;
 
 use Bl2\Service\AbstractEntity;
 use Bl2\Service\AbstractEntityResource;
 use Bl2\Service\AbstractRestService;
 use Bl2\Service\Response;
+use Bl2\Util\ResourceHelper\RarityResourceHelper;
 use Spore\ReST\Model\Request;
 
 /**

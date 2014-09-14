@@ -14,6 +14,7 @@ class SessionToken extends AbstractEntity implements \JsonSerializable {
 
     /**
      * @ORM\Column(type="string", length=128)
+     * @Serializer\SerializedName("sessionToken")
      * @var string
      **/
     protected $sessionToken;

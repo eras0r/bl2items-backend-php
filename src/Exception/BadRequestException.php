@@ -5,7 +5,7 @@ namespace Bl2\Exception;
 /**
  * Exception signaling a bad HTTP request.
  */
-class BadRequestException extends Exception {
+class BadRequestException extends \Exception {
 
     private $missingParameter;
 

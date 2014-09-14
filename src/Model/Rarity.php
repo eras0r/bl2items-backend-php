@@ -2,6 +2,7 @@
 
 namespace Bl2\Model;
 
+use Bl2\Exception\EntityObjectValidationException;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -92,7 +93,7 @@ class Rarity extends AbstractEntity {
 
     /**
      * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
+     * @throws \Bl2\Exception\EntityObjectValidationException in case of validation exceptions
      */
     public function validate() {
         $errors = array();
@@ -105,6 +106,9 @@ class Rarity extends AbstractEntity {
         if (empty($this->sortOrder)) {
             $errors["sortOrder"] = "Sort order is required";
         }
-        return $errors;
+
+        if (!empty($errors)) {
+            throw new EntityObjectValidationException($errors);
+        }
     }
 }

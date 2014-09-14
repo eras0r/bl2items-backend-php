@@ -23,4 +23,5 @@ define("HASH_ITERATION_INDEX", 1);
 define("HASH_SALT_INDEX", 2);
 define("HASH_PBKDF2_INDEX", 3);
 
-?>
+// number of random bytes to be used for generating as session's token
+define("TOKEN_BYTE_SIZE", 512);
