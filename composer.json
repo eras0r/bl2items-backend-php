@@ -1,4 +1,10 @@
 {
+    "name": "razornet/bl2items-backend",
+    "version": "1.0.0",
+    "type": "project",
+    "homepage": "https://github.com/eras0r/bl2items-backend/",
+    "license": "MIT",
+    "description": "RESTful interface for the Borderland 2 items database",
     "require": {
         "doctrine/orm": "2.4.*",
         "jms/serializer-bundle": "dev-master",
