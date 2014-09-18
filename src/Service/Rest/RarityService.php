@@ -5,9 +5,9 @@ namespace Bl2\Service\Rest;
 use Bl2\Service\AbstractEntity;
 use Bl2\Service\AbstractEntityResource;
 use Bl2\Service\AbstractRestService;
-use Bl2\Service\Response;
 use Bl2\Util\ResourceHelper\RarityResourceHelper;
 use Spore\ReST\Model\Request;
+use Spore\ReST\Model\Response;
 
 /**
  * This class defines the resource which will provide a RESTful interface for all operations
@@ -53,12 +53,13 @@ class RarityService extends AbstractRestService {
      * @verbs POST
      * @auth admin
      *
-     * @param Request $request
+     * @param Request $request the HTTP request.
+     * @param Response $response the HTTP response.
      *
-     * @return Response
+     * @return \Bl2\Model\AbstractEntity the created resource
      */
-    public function add(Request $request) {
-        return parent::add($request);
+    public function add(Request $request, Response $response) {
+        return parent::add($request, $response);
     }
 
     /**
@@ -80,11 +81,12 @@ class RarityService extends AbstractRestService {
      * @verbs DELETE
      *
      * @param Request $request the HTTP request
+     * @param Response $response the HTTP response
      *
      * @return Response
      */
-    public function remove(Request $request) {
-        return parent::remove($request, $request->params['id']);
+    public function remove(Request $request, Response $response) {
+        return parent::remove($request, $response, $request->params['id']);
     }
 
     /**
