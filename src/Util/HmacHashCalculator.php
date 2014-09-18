@@ -7,6 +7,15 @@ use Slim\Http\Request;
 
 class HmacHashCalculator {
 
+    const HEADER_MICRO_TIME = "X_MICRO_TIME";
+
+    const HEADER_SESSION_TOKEN = "X_SESSION_TOKEN";
+
+    const HEADER_HMAC_HASH = "X_HMAC_HASH";
+
+    /**
+     * @var \Doctrine\ORM\EntityManager the entity manager.
+     */
     private $entityManager;
 
     /**
@@ -29,20 +38,20 @@ class HmacHashCalculator {
         $this->entityManager = EntityManagerFactory::getEntityManager();
         $this->request = $request;
 
-        if ($this->request->headers("X_MICRO_TIME") == null) {
-            throw new UnauthorizedException("X_MICRO_TIME header is not present.");
+        if ($this->request->headers(self::HEADER_MICRO_TIME) == null) {
+            throw new UnauthorizedException(self::HEADER_MICRO_TIME . " header is not present.");
         }
-        $this->microTime = $this->request->headers("X_MICRO_TIME");
+        $this->microTime = $this->request->headers(self::HEADER_MICRO_TIME);
 
-        if ($this->request->headers("X_SESSION_TOKEN") == null) {
-            throw new UnauthorizedException("X_SESSION_TOKEN header is not present.");
+        if ($this->request->headers(self::HEADER_SESSION_TOKEN) == null) {
+            throw new UnauthorizedException(self::HEADER_SESSION_TOKEN . " header is not present.");
         }
-        $this->sessionToken = $this->request->headers("X_SESSION_TOKEN");
+        $this->sessionToken = $this->request->headers(self::HEADER_SESSION_TOKEN);
 
-        if ($this->request->headers("X_HMAC_HASH") == null) {
-            throw new UnauthorizedException("X_HMAC_HASH is not present.");
+        if ($this->request->headers(self::HEADER_HMAC_HASH) == null) {
+            throw new UnauthorizedException(self::HEADER_HMAC_HASH . " is not present.");
         }
-        $this->sentHmacHash = $this->request->headers("X_HMAC_HASH");
+        $this->sentHmacHash = $this->request->headers(self::HEADER_HMAC_HASH);
     }
 
     private function calculateHmacHash($data, $secret) {

@@ -11,6 +11,9 @@ use Doctrine\ORM\Tools\Setup;
  */
 final class EntityManagerFactory {
 
+    /**
+     * @var EntityManager
+     */
     private static $entityManager;
 
     /**
