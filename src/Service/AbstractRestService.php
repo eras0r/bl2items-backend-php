@@ -8,6 +8,8 @@ use Bl2\Model\AbstractEntity;
 use Bl2\Util\AbstractResourceHelper;
 use Doctrine\DBAL\DBALException;
 use Spore\ReST\Model\Request;
+use Spore\ReST\Model\Response;
+use Spore\ReST\Model\Status;
 
 /**
  * Abstract super class for REST services.
@@ -41,7 +43,7 @@ abstract class AbstractRestService {
      * Retrieves a single resource.
      *
      * @param Request $request the HTTP request
-     * @param $id int the id of the resource to be retrieved.
+     * @param int $id the id of the resource to be retrieved.
      *
      * @return AbstractEntity the retrieved resource object.
      * @throws \Bl2\Exception\NotFoundException
@@ -58,10 +60,11 @@ abstract class AbstractRestService {
      * Adds and saves a new resource.
      *
      * @param Request $request the HTTP request.
+     * @param Response $response the HTTP response.
      *
      * @return AbstractEntity the newly created resource.
      */
-    public function add(Request $request) {
+    public function add(Request $request, Response $response) {
         // cast stdClass to array
         $properties = (array)$request->data;
         $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
@@ -71,17 +74,23 @@ abstract class AbstractRestService {
         try {
             $this->getEntityManager()->persist($entityInstance);
             $this->getEntityManager()->flush();
+            $response->status = Status::CREATED;
+            $response->headers["Location"] = $this->getResourceUrl($request, $entityInstance);
             return $entityInstance;
         } catch (DBALException $e) {
-            return $this->handleUniqueKeyException($e);
+            $this->handleUniqueKeyException($e);
         }
+    }
+
+    private function getResourceUrl($request, $entityInstance) {
+        return $request->request()->getUrl() . $request->request()->getPath() . '/' . $entityInstance->getId();
     }
 
     /**
      * Completely updates a resource by writing each field of the resource.
      *
      * @param Request $request the HTTP request
-     * @param $id int the id of the resource to be updated
+     * @param int $id the id of the resource to be updated
      *
      * @return AbstractEntity the updated resource
      */
@@ -99,7 +108,7 @@ abstract class AbstractRestService {
             $this->getEntityManager()->flush();
             return $this->get($request, $id);
         } catch (DBALException $e) {
-            return $this->handleUniqueKeyException($e);
+            $this->handleUniqueKeyException($e);
         }
     }
 
@@ -107,16 +116,17 @@ abstract class AbstractRestService {
      * Removes (deletes) a resource.
      *
      * @param Request $request the HTTP request.
+     * @param \Spore\ReST\Model\Response $response the HTTP response
      * @param $id int the id of the resource to be removed
      *
-     * @return Response TODO proper return value
+     * @return null
      */
-    public function remove(Request $request, $id) {
+    public function remove(Request $request, Response $response, $id) {
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
         $this->getEntityManager()->remove($entityObject);
         $this->getEntityManager()->flush();
-        // FIXME proper return value
-        return new Response(Response::NOCONTENT);
+        $response->status = Status::NO_CONTENT;
+        return "Resource removed";
     }
 
     /**
@@ -131,6 +141,11 @@ abstract class AbstractRestService {
         return $this->getResourceHelper()->getEntityManager();
     }
 
+    /**
+     * @param DBALException $e
+     *
+     * @throws \Bl2\Exception\UniqueKeyConstraintException
+     */
     protected function handleUniqueKeyException(DBALException $e) {
         $errors = array();
         if ($e->getPrevious()->getCode() === '23000') {
