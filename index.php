@@ -46,10 +46,8 @@ $app->error(function (Exception $e) use ($app) {
         // TODO give a better hint than just the "Unauthorized" text
         $app->halt(Status::UNAUTHORIZED, "Unauthorized");
     } else if ($e instanceof EntityObjectValidationException) {
-        // TODO give a better hint than just the "Unauthorized" text
         $app->halt(Status::UNPROCESSABLE_ENTITY, json_encode($e->getValidationErrors()));
     } else if ($e instanceof UniqueKeyConstraintException) {
-        // TODO give a better hint than just the "Unauthorized" text
         $app->halt(Status::UNPROCESSABLE_ENTITY, json_encode($e->getConstraintViolations()));
     }
 
