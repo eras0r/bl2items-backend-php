@@ -5,6 +5,8 @@ define("DB_USER", "bl2items");
 define("DB_PASSWORD", "AxGdtXcS9CS8HEc8");
 define("DB_NAME", "bl2items");
 
+define("ENTITIES_PATH", "../Model");
+
 define("DEBUG_MODE", true);
 
 define("SECRET_HASH_ALGORITHM", "sha512");

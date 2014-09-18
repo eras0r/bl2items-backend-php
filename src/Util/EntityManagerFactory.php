@@ -33,7 +33,7 @@ final class EntityManagerFactory {
     private static function initEntityManager() {
         // Create a simple "default" Doctrine ORM configuration for Annotations
         $isDevMode = true;
-        $config = Setup::createAnnotationMetadataConfiguration(array("../Model"), $isDevMode, null, null,
+        $config = Setup::createAnnotationMetadataConfiguration(array(ENTITIES_PATH), $isDevMode, null, null,
             false);
 //        $config = Setup::createAnnotationMetadataConfiguration(array("/opt/lampp/htdocs/bl2items-backend/src/Model"), $isDevMode, null, null,
 //            false);
