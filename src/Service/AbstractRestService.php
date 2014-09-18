@@ -4,8 +4,8 @@ namespace Bl2\Service;
 
 use Bl2\Exception\NotFoundException;
 use Bl2\Exception\UniqueKeyConstraintException;
+use Bl2\Model\AbstractEntity;
 use Bl2\Util\AbstractResourceHelper;
-use Bl2\Util\HmacHashCalculator;
 use Doctrine\DBAL\DBALException;
 use Spore\ReST\Model\Request;
 
@@ -20,34 +20,33 @@ abstract class AbstractRestService {
     private $resourceHelper;
 
     /**
-     * @var HmacHashCalculator
-     */
-    private $hmacCalculator;
-
-    /**
      * @param AbstractResourceHelper $resourceHelper
      */
     function __construct(AbstractResourceHelper $resourceHelper) {
         $this->resourceHelper = $resourceHelper;
         // TODO use dependency injection
-        $this->hmacCalculator = new HmacHashCalculator();
+
     }
 
     /**
      * Gets a list containing all objects of the entity this resource is based on.
      */
     public function getAll(Request $request) {
-//        $this->checkHmacHash($request->data);
         $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
         $result = $repository->findBy($this->getCriteria(), $this->getSortOrders());
         return $result;
     }
 
     /**
-     * Gets a single entity object.
+     * Retrieves a single resource.
+     *
+     * @param Request $request the HTTP request
+     * @param $id int the id of the resource to be retrieved.
+     *
+     * @return AbstractEntity the retrieved resource object.
+     * @throws \Bl2\Exception\NotFoundException
      */
     public function get(Request $request, $id) {
-//        $this->checkHmacHash($request->data);
         $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
         if ($entityObj == null) {
             throw new NotFoundException("No instance for entity '" . $this->getResourceHelper()->getEntityName() . "' found for id '$id'");
@@ -56,14 +55,13 @@ abstract class AbstractRestService {
     }
 
     /**
-     * Adds and saves a entity instance to the given resource.
+     * Adds and saves a new resource.
      *
-     * @param Request $request
+     * @param Request $request the HTTP request.
      *
-     * @return Response
+     * @return AbstractEntity the newly created resource.
      */
     public function add(Request $request) {
-//        $this->checkHmacHash($request->data);
         // cast stdClass to array
         $properties = (array)$request->data;
         $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
@@ -80,11 +78,14 @@ abstract class AbstractRestService {
     }
 
     /**
-     * Updates a single entity object.
+     * Completely updates a resource by writing each field of the resource.
+     *
+     * @param Request $request the HTTP request
+     * @param $id int the id of the resource to be updated
+     *
+     * @return AbstractEntity the updated resource
      */
-    public function update(Request $request) {
-//        $this->checkHmacHash($request->data);
-        $id = $request->params['id'];
+    public function update(Request $request, $id) {
         // cast stdClass to array
         $jsonData = (array)$request->data;
 
@@ -103,32 +104,32 @@ abstract class AbstractRestService {
     }
 
     /**
-     * Deletes a single entity object.
+     * Removes (deletes) a resource.
+     *
+     * @param Request $request the HTTP request.
+     * @param $id int the id of the resource to be removed
+     *
+     * @return Response TODO proper return value
      */
-    public function remove(Request $request) {
-//        $this->checkHmacHash($request->data);
-        $id = $request->params['id'];
-
+    public function remove(Request $request, $id) {
         $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
         $this->getEntityManager()->remove($entityObject);
         $this->getEntityManager()->flush();
+        // FIXME proper return value
         return new Response(Response::NOCONTENT);
+    }
+
+    /**
+     * Used for HTTP OPTIONS requests.
+     *
+     * @param Request $request the HTTP request
+     */
+    public function options(Request $request) {
     }
 
     protected function getEntityManager() {
         return $this->getResourceHelper()->getEntityManager();
     }
-
-//    /**
-//     * Checks the HMAC hash for the current HTTP request.
-//     *
-//     * @param $data stdClass|array The deserialized request body
-//     *
-//     * @throws UnauthorizedException in case the HMAC hash is invalid.
-//     */
-//    protected function checkHmacHash($data) {
-//        return $this->hmacCalculator->checkHmacHash($data);
-//    }
 
     protected function handleUniqueKeyException(DBALException $e) {
         $errors = array();

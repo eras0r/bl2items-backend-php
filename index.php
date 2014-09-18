@@ -63,7 +63,7 @@ $app->authCallback(function ($requiredRoles) use ($app) {
         return true;
     }
 
-    $hmacCalculator = new HmacHashCalculator();
+    $hmacCalculator = new HmacHashCalculator($app->request());
     $hmacCalculator->checkHmacHash($app->request()->getBody());
 
     // TODO get the user's current roles from the database

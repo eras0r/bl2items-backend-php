@@ -3,48 +3,59 @@
 namespace Bl2\Util;
 
 use Bl2\Exception\UnauthorizedException;
+use Slim\Http\Request;
 
 class HmacHashCalculator {
 
     private $entityManager;
 
-    private $url;
-
-//    private $data;
+    /**
+     * the http request
+     * @var Request
+     */
+    private $request;
 
     private $microTime;
 
     private $sessionToken;
 
+    /**
+     * @var string the HMAC hash sent by the client. This value will be compared with the calculated value from the
+     * server.
+     */
     private $sentHmacHash;
 
-    function __construct() {
+    function __construct($request) {
         $this->entityManager = EntityManagerFactory::getEntityManager();
-        $this->url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    }
+        $this->request = $request;
 
-    private function initCustomHeaders() {
-        // TODO check microTime, sessionToken and sentHmacHash to not be empty
-        if (!isset($_SERVER["HTTP_X_MICRO_TIME"])) {
-            throw new UnauthorizedException("HTTP_X_MICRO_TIME must be set.");
+        if ($this->request->headers("X_MICRO_TIME") == null) {
+            throw new UnauthorizedException("X_MICRO_TIME header is not present.");
         }
-        $this->microTime = $_SERVER["HTTP_X_MICRO_TIME"];
+        $this->microTime = $this->request->headers("X_MICRO_TIME");
 
-        if (!isset($_SERVER["HTTP_X_SESSION_TOKEN"])) {
-            throw new UnauthorizedException("HTTP_X_SESSION_TOKEN must be set.");
+        if ($this->request->headers("X_SESSION_TOKEN") == null) {
+            throw new UnauthorizedException("X_SESSION_TOKEN header is not present.");
         }
-        $this->sessionToken = $_SERVER["HTTP_X_SESSION_TOKEN"];
+        $this->sessionToken = $this->request->headers("X_SESSION_TOKEN");
 
-        if (!isset($_SERVER["HTTP_X_HMAC_HASH"])) {
-            throw new UnauthorizedException("HTTP_X_HMAC_HASH must be set.");
+        if ($this->request->headers("X_HMAC_HASH") == null) {
+            throw new UnauthorizedException("X_HMAC_HASH is not present.");
         }
-        $this->sentHmacHash = $_SERVER["HTTP_X_HMAC_HASH"];
+        $this->sentHmacHash = $this->request->headers("X_HMAC_HASH");
     }
 
     private function calculateHmacHash($data, $secret) {
-        $this->initCustomHeaders();
-        $jsonData = isset($data) ? json_encode($data) : "";
-        return hash_hmac("sha512", $this->url . ":" . $jsonData . ":" . $this->microTime, $secret);
+        $jsonData = !empty($data) ? json_encode($data) : "";
+        return hash_hmac("sha512", $this->getUrl() . ":" . $jsonData . ":" . $this->microTime, $secret);
+    }
+
+    /**
+     * Extracts the url from the request.
+     * @return string the complete url (including http:// or https:// and host part).
+     */
+    private function getUrl() {
+        return $this->request->getUrl() . $this->request->getPath();
     }
 
     /**
@@ -55,8 +66,6 @@ class HmacHashCalculator {
      * @throws UnauthorizedException in case the HMAC hash is invalid.
      */
     public function checkHmacHash($data) {
-        $this->initCustomHeaders();
-
         // check if SessionToken $this->sessionToken  exists
         $sessionToken = $this->entityManager->getRepository('Bl2\Model\SessionToken')->findOneBy(array('sessionToken' => $this->sessionToken));
         if (!$sessionToken) {

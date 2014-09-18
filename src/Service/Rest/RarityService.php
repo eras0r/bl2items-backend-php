@@ -39,13 +39,12 @@ class RarityService extends AbstractRestService {
      * @url /rarities/:id/
      * @verbs GET
      *
-     * @param Request $request
+     * @param Request $request the HTTP request
      *
-     * @return null|object
+     * @return \Bl2\Model\AbstractEntity
      */
     public function get(Request $request) {
-        $id = $request->params['id'];
-        return parent::get($request, $id);
+        return parent::get($request, $request->params['id']);
     }
 
     /**
@@ -67,12 +66,12 @@ class RarityService extends AbstractRestService {
      * @url /rarities/:id/
      * @verbs PUT
      *
-     * @param Request $request
+     * @param Request $request the HTTP request
      *
-     * @return Response|null|object
+     * @return \Bl2\Model\AbstractEntity
      */
     public function update(Request $request) {
-        return parent::update($request);
+        return parent::update($request, $request->params['id']);
     }
 
     /**
@@ -80,20 +79,22 @@ class RarityService extends AbstractRestService {
      * @url /rarities/:id/
      * @verbs DELETE
      *
-     * @param Request $request
+     * @param Request $request the HTTP request
      *
      * @return Response
      */
     public function remove(Request $request) {
-        return parent::remove($request);
+        return parent::remove($request, $request->params['id']);
     }
 
     /**
-     * Used for CORS
+     * HTTP OPTIONS request used for CORS.
      * @url /rarities(/:id)/
      * @verbs OPTIONS
+     *
+     * @param Request $request the HTTP request
      */
     public function options(Request $request) {
-        return;
+        return parent::options($request);
     }
 }
