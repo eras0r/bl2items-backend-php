@@ -75,4 +75,8 @@ $app->authCallback(function ($requiredRoles) use ($app) {
     return false;
 });
 
+$app->authFailed(function () use ($app) {
+    $app->halt(Status::FORBIDDEN, "Permission denied. You do not have the required role to perform this action.");
+});
+
 $app->run();
