@@ -31,21 +31,7 @@ abstract class AbstractEntity {
      * @param array $data array holding the new entity objects property (key = property name, value = property value)
      */
     protected function __construct(array $data = array()) {
-        foreach ($data as $key => $val) {
-            if (property_exists(get_class($this), $key) && $key != "id") {
-                $this->$key = $val;
-            }
-        }
-    }
-
-    /**
-     * Adds a validation error for this entity.
-     *
-     * @param string $propertyName the name of the property on which the validation error occurred.
-     * @param string $message validation error message
-     */
-    protected function addValidationError($propertyName, $message) {
-        $this->validationErrors[$propertyName] = $message;
+        $this->applyPropertiesFromJson($data);
     }
 
     /**
@@ -64,12 +50,16 @@ abstract class AbstractEntity {
     }
 
     /**
-     * Validates this entity by adding a validation error for each validation error which has occurred.
-     * This method does the real validation logic and should be overridden by subclasses to implement validation
-     * business logic.
+     * Overrides this objects properties with the given JSON data properties.
+     *
+     * @param array $jsonData the object data to be overridden (key = property name, value = property value)
      */
-    protected function doValidation() {
-        $this->validationErrors = array();
+    public function applyPropertiesFromJson($jsonData) {
+        foreach ($jsonData as $key => $val) {
+            if (property_exists(get_class($this), $key) && $key != "id") {
+                $this->$key = $val;
+            }
+        }
     }
 
     /**
@@ -83,5 +73,24 @@ abstract class AbstractEntity {
         if (!empty($this->validationErrors)) {
             throw new EntityObjectValidationException($this->validationErrors);
         }
+    }
+
+    /**
+     * Validates this entity by adding a validation error for each validation error which has occurred.
+     * This method does the real validation logic and should be overridden by subclasses to implement validation
+     * business logic.
+     */
+    protected function doValidation() {
+        $this->validationErrors = array();
+    }
+
+    /**
+     * Adds a validation error for this entity.
+     *
+     * @param string $propertyName the name of the property on which the validation error occurred.
+     * @param string $message validation error message
+     */
+    protected function addValidationError($propertyName, $message) {
+        $this->validationErrors[$propertyName] = $message;
     }
 }

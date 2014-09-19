@@ -22,6 +22,9 @@ final class EntityManagerFactory {
     private function __construct() {
     }
 
+    /**
+     * @return EntityManager a reference to the entity manager.
+     */
     public static function getEntityManager() {
         if (!isset(self::$entityManager)) {
             self::initEntityManager();

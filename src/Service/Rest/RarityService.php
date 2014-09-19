@@ -2,10 +2,10 @@
 
 namespace Bl2\Service\Rest;
 
+use Bl2\Model\Rarity;
 use Bl2\Service\AbstractEntity;
 use Bl2\Service\AbstractEntityResource;
 use Bl2\Service\AbstractRestService;
-use Bl2\Util\ResourceHelper\RarityResourceHelper;
 use Spore\ReST\Model\Request;
 use Spore\ReST\Model\Response;
 
@@ -15,9 +15,11 @@ use Spore\ReST\Model\Response;
  */
 class RarityService extends AbstractRestService {
 
+    /**
+     * Constructor
+     */
     function __construct() {
-        // TODO use dependency injection
-        parent::__construct(new RarityResourceHelper());
+        parent::__construct();
     }
 
     /**
@@ -44,7 +46,7 @@ class RarityService extends AbstractRestService {
      * @return \Bl2\Model\AbstractEntity
      */
     public function get(Request $request) {
-        return parent::get($request, $request->params['id']);
+        return parent::load($request, $request->params['id']);
     }
 
     /**
@@ -59,7 +61,9 @@ class RarityService extends AbstractRestService {
      * @return \Bl2\Model\AbstractEntity the created resource
      */
     public function add(Request $request, Response $response) {
-        return parent::add($request, $response);
+        // cast stdClass to array
+        $properties = (array)$request->data;
+        return $this->create($request, $response, new Rarity($properties));
     }
 
     /**
@@ -72,7 +76,8 @@ class RarityService extends AbstractRestService {
      * @return \Bl2\Model\AbstractEntity
      */
     public function update(Request $request) {
-        return parent::update($request, $request->params['id']);
+        $id = $request->params['id'];
+        return $this->save($request, $id);
     }
 
     /**
@@ -97,6 +102,14 @@ class RarityService extends AbstractRestService {
      * @param Request $request the HTTP request
      */
     public function options(Request $request) {
-        return parent::options($request);
+        parent::options($request);
+    }
+
+    /**
+     * Gets the name of the entity on which this service is based.
+     * @return string the name of the entity on which this service is based.
+     */
+    protected function getEntityName() {
+        return Rarity::entityName();
     }
 }

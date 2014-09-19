@@ -6,7 +6,9 @@ use Bl2\Exception\NotFoundException;
 use Bl2\Exception\UniqueKeyConstraintException;
 use Bl2\Model\AbstractEntity;
 use Bl2\Util\AbstractResourceHelper;
+use Bl2\Util\EntityManagerFactory;
 use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\EntityManager;
 use Spore\ReST\Model\Request;
 use Spore\ReST\Model\Response;
 use Spore\ReST\Model\Status;
@@ -22,19 +24,27 @@ abstract class AbstractRestService {
     private $resourceHelper;
 
     /**
-     * @param AbstractResourceHelper $resourceHelper
+     * @var EntityManager the entity manager.
      */
-    function __construct(AbstractResourceHelper $resourceHelper) {
-        $this->resourceHelper = $resourceHelper;
-        // TODO use dependency injection
+    private $entityManager;
 
+    /**
+     * Constructor
+     */
+    function __construct() {
+        // TODO use dependency injection
+        $this->entityManager = EntityManagerFactory::getEntityManager();
     }
 
     /**
      * Gets a list containing all objects of the entity this resource is based on.
+     *
+     * @param Request $request the HTTP request
+     *
+     * @return array all objects of the entity this resource is based on.
      */
     public function getAll(Request $request) {
-        $repository = $this->getEntityManager()->getRepository($this->getResourceHelper()->getEntityName());
+        $repository = $this->getEntityManager()->getRepository($this->getEntityName());
         $result = $repository->findBy($this->getCriteria(), $this->getSortOrders());
         return $result;
     }
@@ -48,81 +58,66 @@ abstract class AbstractRestService {
      * @return AbstractEntity the retrieved resource object.
      * @throws \Bl2\Exception\NotFoundException
      */
-    public function get(Request $request, $id) {
-        $entityObj = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
+    public function load(Request $request, $id) {
+        $entityObj = $this->getEntityManager()->find($this->getEntityName(), $id);
         if ($entityObj == null) {
-            throw new NotFoundException("No instance for entity '" . $this->getResourceHelper()->getEntityName() . "' found for id '$id'");
+            throw new NotFoundException("No instance for entity '" . $this->getEntityName() . "' found for id '$id'");
         }
         return $entityObj;
     }
 
     /**
-     * Adds and saves a new resource.
+     * Creates and saves a new entity object.
      *
-     * @param Request $request the HTTP request.
-     * @param Response $response the HTTP response.
+     * @param Request $request the HTTP request
+     * @param Response $response the HTTP response
+     * @param AbstractEntity $entityObject the new entity object to be saved
      *
      * @return AbstractEntity the newly created resource.
      */
-    public function add(Request $request, Response $response) {
-        // cast stdClass to array
-        $properties = (array)$request->data;
-        $entityInstance = $this->getResourceHelper()->createNewEntityInstance($properties);
+    public function create(Request $request, Response $response, $entityObject) {
+        $persistedEntityObject = $this->persistEntityObject($entityObject);
 
-        $entityInstance->validate();
+        // change HTTP response status and add location header for newly created objects
+        $response->status = Status::CREATED;
+        $response->headers["Location"] = $this->getResourceUrl($request, $persistedEntityObject);
 
-        try {
-            $this->getEntityManager()->persist($entityInstance);
-            $this->getEntityManager()->flush();
-            $response->status = Status::CREATED;
-            $response->headers["Location"] = $this->getResourceUrl($request, $entityInstance);
-            return $entityInstance;
-        } catch (DBALException $e) {
-            $this->handleUniqueKeyException($e);
-        }
-    }
-
-    private function getResourceUrl($request, $entityInstance) {
-        return $request->request()->getUrl() . $request->request()->getPath() . '/' . $entityInstance->getId();
+        return $persistedEntityObject;
     }
 
     /**
-     * Completely updates a resource by writing each field of the resource.
+     * Saves the given entity object.
      *
      * @param Request $request the HTTP request
-     * @param int $id the id of the resource to be updated
+     * @param int $id the id of the entity object to be saved
      *
      * @return AbstractEntity the updated resource
      */
-    public function update(Request $request, $id) {
+    public function save(Request $request, $id) {
         // cast stdClass to array
-        $jsonData = (array)$request->data;
+        $properties = (array)$request->data;
 
-        /* @var $entityObject AbstractEntity */
-        $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
-        $this->getResourceHelper()->updateEntityObject($entityObject, $jsonData);
-        $entityObject->validate();
+        // load the entity object
+        /** @var AbstractEntity $entityObject */
+        $entityObject = $this->load($request, $id);
 
-        try {
-            $this->getEntityManager()->persist($entityObject);
-            $this->getEntityManager()->flush();
-            return $this->get($request, $id);
-        } catch (DBALException $e) {
-            $this->handleUniqueKeyException($e);
-        }
+        // apply properties from JSON data
+        $entityObject->applyPropertiesFromJson($properties);
+
+        return $this->persistEntityObject($entityObject);
     }
 
     /**
      * Removes (deletes) a resource.
      *
-     * @param Request $request the HTTP request.
+     * @param Request $request the HTTP request
      * @param \Spore\ReST\Model\Response $response the HTTP response
      * @param $id int the id of the resource to be removed
      *
-     * @return null
+     * @return string
      */
     public function remove(Request $request, Response $response, $id) {
-        $entityObject = $this->getEntityManager()->find($this->getResourceHelper()->getEntityName(), $id);
+        $entityObject = $this->getEntityManager()->find($this->getEntityName(), $id);
         $this->getEntityManager()->remove($entityObject);
         $this->getEntityManager()->flush();
         $response->status = Status::NO_CONTENT;
@@ -138,7 +133,7 @@ abstract class AbstractRestService {
     }
 
     protected function getEntityManager() {
-        return $this->getResourceHelper()->getEntityManager();
+        return $this->entityManager;
     }
 
     /**
@@ -209,5 +204,27 @@ abstract class AbstractRestService {
     protected function getCriteria() {
         // TODO parse other GET parameters than "sort"
         return array();
+    }
+
+    /**
+     * Gets the name of the entity on which this service is based.
+     * @return string the name of the entity on which this service is based.
+     */
+    protected abstract function getEntityName();
+
+    private function getResourceUrl($request, $entityInstance) {
+        return $request->request()->getUrl() . $request->request()->getPath() . '/' . $entityInstance->getId();
+    }
+
+    private function persistEntityObject(AbstractEntity $entityObject) {
+        $entityObject->validate();
+
+        try {
+            $this->getEntityManager()->persist($entityObject);
+            $this->getEntityManager()->flush();
+            return $entityObject;
+        } catch (DBALException $e) {
+            $this->handleUniqueKeyException($e);
+        }
     }
 }
