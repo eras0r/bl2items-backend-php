@@ -6,9 +6,6 @@ use Bl2\Exception\BadRequestException;
 use Bl2\Exception\UnauthorizedException;
 use Bl2\Model\SessionToken;
 use Bl2\Model\User;
-use Bl2\Service\AbstractEntity;
-use Bl2\Service\AbstractEntityResource;
-use Bl2\Service\Response;
 use Bl2\Util\EntityManagerFactory;
 use Bl2\Util\HashedPassword;
 use Bl2\Util\PasswordUtil;
@@ -16,10 +13,11 @@ use Doctrine\ORM\EntityManager;
 use Spore\ReST\Model\Request;
 
 /**
- * Restful service providing access to users sessions and login and logout functionality.
- * @package Bl2\Service\Foo
+ * /**
+ * REST Service providing operations on the {@link SessionToken} entity.
+ * @package Bl2\Service\Rest
  */
-class SessionService {
+class SessionTokenService {
 
     /**
      * Doctrine ORM entity manager.
@@ -108,7 +106,6 @@ class SessionService {
      * @verbs OPTIONS
      */
     public function options(Request $request) {
-        return;
     }
 
     /**

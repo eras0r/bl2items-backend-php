@@ -34,7 +34,6 @@ $sporeConfig = array(
 $app = new Spore($sporeConfig);
 
 // scan recursively for services
-// TODO find a better way than Foo for the directory :-)
 $app->addServicesDirectory("src/Service/Rest/", 'Bl2\Service\Rest');
 
 // override error handler
@@ -65,7 +64,7 @@ $app->authCallback(function ($requiredRoles) use ($app) {
     $user = $hmacCalculator->checkHmacHash();
 
     // iterate over user roles
-    foreach($user->getRoles() as $role) {
+    foreach ($user->getRoles() as $role) {
         // current user role matches one of the required roles
         if (in_array($role->getRolename(), $requiredRoles)) {
             return true;

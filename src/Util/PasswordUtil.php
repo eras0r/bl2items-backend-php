@@ -39,14 +39,14 @@ class PasswordUtil {
      * Creates a random salt.
      * @return string the randomly created salt.
      */
-    private function createSalt() {
+    public function createRandomSalt() {
         return base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
     }
 
     /**
      * Creates a hashed password for the given password.
      *
-     * @param $password The password to be hashed
+     * @param string $password The password to be hashed
      * @param string $algorithm Name of selected hashing algorithm (i.e. md5, sha256, haval160,4, etc..) See hash_algos() for a list of supported algorithms.
      * @param int $iterations The number of internal iterations to perform for the derivation.
      * @param string $salt The salt to use for the derivation. This value should be generated randomly.
@@ -63,7 +63,7 @@ class PasswordUtil {
             $iterations = PBKDF2_ITERATIONS;
         }
         if ($salt == null) {
-            $salt = $this->createSalt();
+            $salt = $this->createRandomSalt();
         }
 
         $hash = base64_encode($this->pbkdf2($algorithm, $password, $salt, $iterations, PBKDF2_HASH_BYTE_SIZE, true));

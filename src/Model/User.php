@@ -21,24 +21,28 @@ class User extends AbstractEntity {
 
     /**
      * @ORM\Column(type="string", length=16)
+     * @Serializer\Exclude
      * @var string
      **/
     protected $algorithm;
 
     /**
      * @ORM\Column(type="integer")
+     * @Serializer\Exclude
      * @var int
      **/
     protected $iterations;
 
     /**
      * @ORM\Column(type="string")
+     * @Serializer\Exclude
      * @var string
      **/
     protected $salt;
 
     /**
      * @ORM\Column(type="string")
+     * @Serializer\Exclude
      * @var string
      **/
     protected $password;

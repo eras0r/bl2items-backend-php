@@ -1,8 +1,12 @@
 <?php
 
 // TODO better way to include
-require_once '/opt/lampp/htdocs/bl2items-backend/util/PasswordUtil.php';
-require_once '/opt/lampp/htdocs/bl2items-backend/include/config.php';
+require_once '../../vendor/autoload.php';
+require_once '../../config.php';
+
+//require_once '/opt/lampp/htdocs/bl2items-backend/src/Util/PasswordUtil.php';
+
+use Bl2\Util\PasswordUtil;
 
 class PasswordUtilTest extends PHPUnit_Framework_TestCase {
 

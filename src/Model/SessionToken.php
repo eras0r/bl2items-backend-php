@@ -22,7 +22,7 @@ class SessionToken extends AbstractEntity {
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", nullable=false)
-     * @Serializer\Exclude
+     *
      * @var User
      */
     protected $user;
