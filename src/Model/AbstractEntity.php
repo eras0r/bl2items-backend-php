@@ -18,8 +18,12 @@ abstract class AbstractEntity {
      **/
     protected $id;
 
-    // constructor used for JSON
-    protected function __construct(array $data) {
+    /**
+     * Create a new entity object by using the given array to initialize the new objects properties.
+     *
+     * @param array $data array holding the new entity objects property (key = property name, value = property value)
+     */
+    protected function __construct(array $data = array()) {
         foreach ($data as $key => $val) {
             if (property_exists(get_class($this), $key) && $key != "id") {
                 $this->$key = $val;

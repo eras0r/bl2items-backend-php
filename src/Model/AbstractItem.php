@@ -15,15 +15,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\DiscriminatorMap({"weapon" = "Weapon", "shield" = "Shield"})
  * @Serializer\Discriminator(field = "itemType", map = {"weapon": "Weapon", "shield": "Shield"})
  */
-abstract class AbstractItem {
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue
-     * @var int
-     **/
-    protected $id;
+abstract class AbstractItem extends AbstractEntity {
 
     /**
      * @ORM\Column(type="integer")
@@ -66,16 +58,12 @@ abstract class AbstractItem {
     protected $additionalText;
 
     /**
-     * Creates a new manufacturer by initializing is properties by using hte values given in the associative array.
+     * Create a new entity object by using the given array to initialize the new objects properties.
      *
-     * @param array $data associative array holding the properties for the manufacturer.
+     * @param array $data array holding the new entity objects property (key = property name, value = property value)
      */
-    public function __construct(array $data) {
-        foreach ($data as $key => $val) {
-            if (property_exists(get_class($this), $key) && $key != "id") {
-                $this->$key = $val;
-            }
-        }
+    public function __construct(array $data = array()) {
+        parent::__construct($data);
     }
 
     /**

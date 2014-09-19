@@ -3,6 +3,7 @@
 namespace Bl2\Util;
 
 use Bl2\Exception\UnauthorizedException;
+use Bl2\Model\User;
 use Slim\Http\Request;
 
 class HmacHashCalculator {
@@ -68,13 +69,11 @@ class HmacHashCalculator {
     }
 
     /**
-     * Checks the HMAC hash for the current HTTP request.
-     *
-     * @param $data stdClass|array The deserialized request body
-     *
-     * @throws UnauthorizedException in case the HMAC hash is invalid.
+     * Checks the HMAC hash for the current HTTP request and return the currently logged in user on success.
+     * @return User the logged in user
+     * @throws \Bl2\Exception\UnauthorizedException in case the sent HMAC hash value is incorrect.
      */
-    public function checkHmacHash($data) {
+    public function checkHmacHash() {
         // check if SessionToken $this->sessionToken  exists
         $sessionToken = $this->entityManager->getRepository('Bl2\Model\SessionToken')->findOneBy(array('sessionToken' => $this->sessionToken));
         if (!$sessionToken) {
@@ -83,10 +82,12 @@ class HmacHashCalculator {
 
         $secret = $sessionToken->getSecret();
 
-        $generatedHmacHash = $this->calculateHmacHash($data, $secret);
+        $generatedHmacHash = $this->calculateHmacHash($this->request->getBody(), $secret);
 
         if ($generatedHmacHash != $this->sentHmacHash) {
             throw new UnauthorizedException();
         }
+
+        return $sessionToken->getUser();
     }
 }

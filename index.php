@@ -62,12 +62,18 @@ $app->authCallback(function ($requiredRoles) use ($app) {
     }
 
     $hmacCalculator = new HmacHashCalculator($app->request());
-    $hmacCalculator->checkHmacHash($app->request()->getBody());
+    $user = $hmacCalculator->checkHmacHash();
 
-    // TODO get the user's current roles from the database
-    $currentRoles = array("admin", "user");
+    // iterate over user roles
+    foreach($user->getRoles() as $role) {
+        // current user role matches one of the required roles
+        if (in_array($role->getRolename(), $requiredRoles)) {
+            return true;
+        }
+    }
 
-    return count(array_intersect($requiredRoles, $currentRoles)) > 0;
+    // user has none of the required roles
+    return false;
 });
 
 $app->run();

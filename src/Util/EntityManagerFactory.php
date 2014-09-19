@@ -35,8 +35,6 @@ final class EntityManagerFactory {
         $isDevMode = true;
         $config = Setup::createAnnotationMetadataConfiguration(array(ENTITIES_PATH), $isDevMode, null, null,
             false);
-//        $config = Setup::createAnnotationMetadataConfiguration(array("/opt/lampp/htdocs/bl2items-backend/src/Model"), $isDevMode, null, null,
-//            false);
         AnnotationRegistry::registerAutoloadNamespace('JMS\Serializer\Annotation',
             __DIR__ . "/../../vendor/jms/serializer/src");
 

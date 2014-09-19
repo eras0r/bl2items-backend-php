@@ -2,6 +2,7 @@
 
 namespace Bl2\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -43,12 +44,24 @@ class User extends AbstractEntity {
     protected $password;
 
     /**
-     * Creates a new weapon by initializing is properties by using the values given in the associative array.
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="users_roles",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
+     **/
+    private $roles;
+
+    /**
+     * Creates a new user by initializing its properties with the values given by the array.
      *
-     * @param array $data associative array holding the properties for the weapon.
+     * @param array $data array holding the properties for the new user.
      */
     public function __construct(array $data) {
         parent::__construct($data);
+        if ($this->roles == null) {
+            $this->roles = new ArrayCollection();
+        }
     }
 
     /**
@@ -119,6 +132,13 @@ class User extends AbstractEntity {
      */
     public function getPassword() {
         return $this->password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoles() {
+        return $this->roles;
     }
 
     /**
