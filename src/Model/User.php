@@ -141,21 +141,14 @@ class User extends AbstractEntity {
         return $this->roles;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        // validate super class
-        $errors = array();
+    protected function doValidation() {
+        parent::doValidation();
 
         if (empty($this->username)) {
-            $errors["username"] = "Username is required";
+            $this->addValidationError("username", "Username is required");
         }
         if (empty($this->password)) {
-            $errors["password"] = "Password is required";
+            $this->addValidationError("password", "Password is required");
         }
-
-        return $errors;
     }
 }

@@ -226,50 +226,38 @@ class Weapon extends AbstractItem {
         return $this->type;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        // validate super class
-        $errors = parent::validate();
+    protected function doValidation() {
+        parent::doValidation();
 
         if (empty($this->damage)) {
-            $errors["damage"] = "Damage is required";
+            $this->addValidationError("damage", "Damage is required");
         }
         if (empty($this->accuracy)) {
-            $errors["accuracy"] = "Accuracy is required";
+            $this->addValidationError("accuracy", "Accuracy is required");
         }
         if (empty($this->fireRate)) {
-            $errors["fireRate"] = "Fire rate is required";
+            $this->addValidationError("fireRate", "Fire rate is required");
         }
         if (empty($this->reloadSpeed)) {
-            $errors["reloadSpeed"] = "Reload speed is required";
+            $this->addValidationError("reloadSpeed", "Reload speed is required");
         }
         if (empty($this->magazineSize)) {
-            $errors["magazineSize"] = "Magazine size is required";
+            $this->addValidationError("magazineSize", "Magazine size is required");
         }
         if (!isset($this->damageType)) {
-            $errors["damageType"] = "Damage type is required";
+            $this->addValidationError("damageType", "Damage type is required");
         }
 
         // validate elemental damage if necessary
         if ($this->damageType->getDamageLabel() != null && !isset($this->elemDamage)) {
-            $errors["elemDamage"] = "Elemental damage is required for weapons with damage type '"
-                . $this->damageType->getName() . "'";
+            $this->addValidationError("elemDamage", "Elemental damage is required for weapons with damage type '" .
+                $this->damageType->getName() . "'");
         }
 
         // validate elemental chance if necessary
         if ($this->damageType->getChanceLabel() != null && !isset($this->elemChance)) {
-            $errors["elemChance"] = "Elemental chance is required for weapons with damage type '"
-                . $this->damageType->getName() . "'";
+            $this->addValidationError("elemChance", "Elemental chance is required for weapons with damage type '"
+                . $this->damageType->getName() . "'");
         }
-
-        // TODO create weaponType entity
-//        if (!isset($this->type)) {
-//            $errors["type"] = "Type is required";
-//        }
-
-        return $errors;
     }
 }

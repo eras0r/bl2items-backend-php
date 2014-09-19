@@ -295,24 +295,17 @@ class Shield extends AbstractItem {
         return $this->spikeDamage;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        // validate super class
-        $errors = parent::validate();
+    protected function doValidation() {
+        parent::doValidation();
 
         if (empty($this->capacity)) {
-            $errors["capacity"] = "Capacity is required";
+            $this->addValidationError("capacity", "Capacity is required");
         }
         if (empty($this->rechargeRate)) {
-            $errors["rechargeRate"] = "Recharge rate is required";
+            $this->addValidationError("rechargeRate", "Recharge rate is required");
         }
         if (empty($this->rechargeDelay)) {
-            $errors["rechargeDelay"] = "recharge delay is required";
+            $this->addValidationError("rechargeDelay", "recharge delay is required");
         }
-
-        return $errors;
     }
 }

@@ -165,25 +165,20 @@ abstract class AbstractItem extends AbstractEntity {
         return $this->uniqueText;
     }
 
-    /**
-     * Validates the item and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        $errors = array();
+    protected function doValidation() {
+        parent::doValidation();
+
         if (empty($this->level)) {
-            $errors["level"] = "Level is required";
+            $this->addValidationError("level", "Level is required");
         }
         if (empty($this->name)) {
-            $errors["name"] = "Name is required";
+            $this->addValidationError("name", "Name is required");
         }
         if ($this->manufacturer == null) {
-            $errors["manufacturer"] = "Manufacturer is required";
+            $this->addValidationError("manufacturer", "Manufacturer is required");
         }
         if ($this->rarity == null) {
-            $errors["rarity"] = "Rarity is required";
+            $this->addValidationError("rarity", "Rarity is required");
         }
-
-        return $errors;
     }
 }

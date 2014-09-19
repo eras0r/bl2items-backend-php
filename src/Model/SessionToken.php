@@ -83,22 +83,15 @@ class SessionToken extends AbstractEntity implements \JsonSerializable {
         return $this->secret;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        // validate super class
-        $errors = array();
+    protected function doValidation() {
+        parent::doValidation();
 
         if (empty($this->sessionToken)) {
-            $errors["sessionToken"] = "SessionToken is required";
+            $this->addValidationError("sessionToken", "SessionToken is required");
         }
         if ($this->user == null) {
-            $errors["user"] = "User is required";
+            $this->addValidationError("user", "User is required");
         }
-
-        return $errors;
     }
 
     /**
@@ -109,6 +102,7 @@ class SessionToken extends AbstractEntity implements \JsonSerializable {
      * which is a value of any type other than a resource.
      */
     public function jsonSerialize() {
+        // TODO try to remove method and use annotations
         return [
             'sessionToken' => $this->sessionToken
         ];

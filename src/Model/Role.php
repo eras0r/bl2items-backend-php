@@ -2,6 +2,7 @@
 
 namespace Bl2\Model;
 
+use Bl2\Exception\EntityObjectValidationException;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -43,9 +44,16 @@ class Role extends AbstractEntity {
 
     /**
      * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
+     * @throws \Bl2\Exception\EntityObjectValidationException in case of validation exceptions
      */
-    public function validate() {
-        // TODO validation
+    public function validate1() {
+        $errors = array();
+        if (empty($this->rolename)) {
+            $errors["rolename"] = "Rolename is required";
+        }
+
+        if (!empty($errors)) {
+            throw new EntityObjectValidationException($errors);
+        }
     }
 }

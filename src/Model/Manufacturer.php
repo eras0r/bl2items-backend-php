@@ -43,15 +43,11 @@ class Manufacturer extends AbstractEntity {
         $this->name = $name;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @return array associative array containing validation errors (if any).
-     */
-    public function validate() {
-        $errors = array();
+    protected function doValidation() {
+        parent::doValidation();
+
         if (empty($this->name)) {
-            $errors["name"] = "Name is required";
+            $this->addValidationError("name", "Name is required");
         }
-        return $errors;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Bl2\Model;
 
-use Bl2\Exception\EntityObjectValidationException;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -91,24 +90,17 @@ class Rarity extends AbstractEntity {
         $this->sortOrder = $sortOrder;
     }
 
-    /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @throws \Bl2\Exception\EntityObjectValidationException in case of validation exceptions
-     */
-    public function validate() {
-        $errors = array();
+    protected function doValidation() {
+        parent::doValidation();
+
         if (empty($this->name)) {
-            $errors["name"] = "Name is required";
+            $this->addValidationError("name", "Name is required");
         }
         if (empty($this->color)) {
-            $errors["color"] = "Color is required";
+            $this->addValidationError("color", "Color is required");
         }
         if (empty($this->sortOrder)) {
-            $errors["sortOrder"] = "Sort order is required";
-        }
-
-        if (!empty($errors)) {
-            throw new EntityObjectValidationException($errors);
+            $this->addValidationError("sortOrder", "Sort order is required");
         }
     }
 }

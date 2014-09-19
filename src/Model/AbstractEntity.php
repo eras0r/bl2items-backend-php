@@ -2,7 +2,9 @@
 
 namespace Bl2\Model;
 
+use Bl2\Exception\EntityObjectValidationException;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Abstract super class for all entities.
@@ -17,6 +19,11 @@ abstract class AbstractEntity {
      * @var int
      **/
     protected $id;
+    /**
+     * @var array holds the validation errors
+     * @Serializer\Exclude
+     */
+    private $validationErrors = array();
 
     /**
      * Create a new entity object by using the given array to initialize the new objects properties.
@@ -29,6 +36,16 @@ abstract class AbstractEntity {
                 $this->$key = $val;
             }
         }
+    }
+
+    /**
+     * Adds a validation error for this entity.
+     *
+     * @param string $propertyName the name of the property on which the validation error occurred.
+     * @param string $message validation error message
+     */
+    protected function addValidationError($propertyName, $message) {
+        $this->validationErrors[$propertyName] = $message;
     }
 
     /**
@@ -47,8 +64,24 @@ abstract class AbstractEntity {
     }
 
     /**
-     * Validates the entity and returns an array containing validation errors (if any).
-     * @throws \Bl2\Exception\EntityObjectValidationException in case of validation exceptions
+     * Validates this entity by adding a validation error for each validation error which has occurred.
+     * This method does the real validation logic and should be overridden by subclasses to implement validation
+     * business logic.
      */
-    public abstract function validate();
+    protected function doValidation() {
+        $this->validationErrors = array();
+    }
+
+    /**
+     * Validates the entity and throws an EntityObjectValidationException in case of validation errors.
+     * @throws EntityObjectValidationException in case of validation exceptions
+     */
+    public final function validate() {
+        // call validation
+        $this->doValidation();
+
+        if (!empty($this->validationErrors)) {
+            throw new EntityObjectValidationException($this->validationErrors);
+        }
+    }
 }
