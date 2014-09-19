@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Entity
  * @ORM\Table(name="session_token")
  */
-class SessionToken extends AbstractEntity implements \JsonSerializable {
+class SessionToken extends AbstractEntity {
 
     /**
      * @ORM\Column(type="string", length=128)
@@ -22,12 +22,14 @@ class SessionToken extends AbstractEntity implements \JsonSerializable {
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", nullable=false)
+     * @Serializer\Exclude
      * @var User
      */
     protected $user;
 
     /**
      * @ORM\Column(type="string", length=128)
+     * @Serializer\Exclude
      * @var string
      **/
     protected $secret;
@@ -92,19 +94,5 @@ class SessionToken extends AbstractEntity implements \JsonSerializable {
         if ($this->user == null) {
             $this->addValidationError("user", "User is required");
         }
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     */
-    public function jsonSerialize() {
-        // TODO try to remove method and use annotations
-        return [
-            'sessionToken' => $this->sessionToken
-        ];
     }
 }
