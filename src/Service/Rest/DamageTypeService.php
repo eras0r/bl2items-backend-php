@@ -2,16 +2,16 @@
 
 namespace Bl2\Service\Rest;
 
-use Bl2\Model\Rarity;
+use Bl2\Model\DamageType;
 use Bl2\Service\AbstractRestService;
 use Spore\ReST\Model\Request;
 use Spore\ReST\Model\Response;
 
 /**
- * REST Service providing operations on the {@link Rarity} entity.
+ * REST Service providing operations on the {@link DamageType} entity.
  * @package Bl2\Service\Rest
  */
-class RarityService extends AbstractRestService {
+class DamageTypeService extends AbstractRestService {
 
     /**
      * Constructor
@@ -21,8 +21,8 @@ class RarityService extends AbstractRestService {
     }
 
     /**
-     * Gets all rarities.
-     * @url /rarities/
+     * Gets all damage types.
+     * @url /damage-types/
      * @verbs GET
      *
      * @param Request $request
@@ -34,44 +34,44 @@ class RarityService extends AbstractRestService {
     }
 
     /**
-     * Gets the rarity with the given id.
-     * @url /rarities/:id/
+     * Gets the damage type with the given id.
+     * @url /damage-types/:id/
      * @verbs GET
      *
      * @param Request $request the HTTP request
      *
-     * @return Rarity
+     * @return DamageType
      */
     public function get(Request $request) {
         return parent::load($request, $request->params['id']);
     }
 
     /**
-     * Creates a new rarity.
-     * @url /rarities/
+     * Creates a new damage type.
+     * @url /damage-types/
      * @verbs POST
      * @auth admin
      *
      * @param Request $request the HTTP request.
      * @param Response $response the HTTP response.
      *
-     * @return Rarity the created rarity
+     * @return DamageType the created damage type
      */
     public function add(Request $request, Response $response) {
         // cast stdClass to array
         $properties = (array)$request->data;
-        return $this->create($request, $response, new Rarity($properties));
+        return $this->create($request, $response, new DamageType($properties));
     }
 
     /**
-     * Updates the rarity with the given id
-     * @url /rarities/:id/
+     * Updates the damage type with the given id
+     * @url /damage-types/:id/
      * @verbs PUT
      * @auth admin
      *
      * @param Request $request the HTTP request
      *
-     * @return Rarity the updated rarity
+     * @return DamageType the updated damage type
      */
     public function update(Request $request) {
         $id = $request->params['id'];
@@ -79,8 +79,8 @@ class RarityService extends AbstractRestService {
     }
 
     /**
-     * Removes the rarity with the given id.
-     * @url /rarities/:id/
+     * Removes the damage type with the given id.
+     * @url /damage-types/:id/
      * @verbs DELETE
      * @auth admin
      *
@@ -95,7 +95,7 @@ class RarityService extends AbstractRestService {
 
     /**
      * HTTP OPTIONS request used for CORS.
-     * @url /rarities(/:id)/
+     * @url /damage-types(/:id)/
      * @verbs OPTIONS
      *
      * @param Request $request the HTTP request
@@ -109,6 +109,6 @@ class RarityService extends AbstractRestService {
      * @return string the name of the entity on which this service is based.
      */
     protected function getEntityName() {
-        return Rarity::entityName();
+        return DamageType::entityName();
     }
 }
