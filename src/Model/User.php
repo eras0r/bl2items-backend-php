@@ -48,13 +48,13 @@ class User extends AbstractEntity {
     protected $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\ManyToMany(targetEntity="Role", fetch="EAGER")
      * @ORM\JoinTable(name="users_roles",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      *      )
      **/
-    private $roles;
+    protected $roles;
 
     /**
      * Creates a new user by initializing its properties with the values given by the array.
@@ -143,6 +143,13 @@ class User extends AbstractEntity {
      */
     public function getRoles() {
         return $this->roles;
+    }
+
+    /**
+     * @param mixed $roles
+     */
+    public function setRoles($roles) {
+        $this->roles = $roles;
     }
 
     protected function doValidation() {

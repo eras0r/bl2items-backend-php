@@ -206,17 +206,7 @@ abstract class AbstractRestService {
         return array();
     }
 
-    /**
-     * Gets the name of the entity on which this service is based.
-     * @return string the name of the entity on which this service is based.
-     */
-    protected abstract function getEntityName();
-
-    private function getResourceUrl($request, $entityInstance) {
-        return $request->request()->getUrl() . $request->request()->getPath() . '/' . $entityInstance->getId();
-    }
-
-    private function persistEntityObject(AbstractEntity $entityObject) {
+    protected function persistEntityObject(AbstractEntity $entityObject) {
         $entityObject->validate();
 
         try {
@@ -226,5 +216,15 @@ abstract class AbstractRestService {
         } catch (DBALException $e) {
             $this->handleUniqueKeyException($e);
         }
+    }
+
+    /**
+     * Gets the name of the entity on which this service is based.
+     * @return string the name of the entity on which this service is based.
+     */
+    protected abstract function getEntityName();
+
+    private function getResourceUrl($request, $entityInstance) {
+        return $request->request()->getUrl() . $request->request()->getPath() . '/' . $entityInstance->getId();
     }
 }
