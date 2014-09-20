@@ -13,14 +13,15 @@ use Spore\ReST\Data\Base;
 
 /**
  * Spore serializer which uses the JMS Serializer to serialize objects in JSON format.
- * This serializer is able to serialize non public object member by using the JMS serializer's annoutations put on
+ * This serializer is able to serialize non public object member by using the JMS serializer's annotations put on
  * the objects to be serialized.
  * @package Bl2\Util
  */
 class JsonSerializer extends Base {
 
     public static function parse($data) {
-        $serializer = SerializerBuilder::create()->build();
+        $builder = SerializerBuilder::create();
+        $serializer = $builder->build();
         return $serializer->serialize($data, "json");
     }
 }

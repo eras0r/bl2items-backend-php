@@ -5,8 +5,15 @@
     "homepage": "https://github.com/eras0r/bl2items-backend/",
     "license": "MIT",
     "description": "RESTful interface for the Borderlands 2 items database",
+    "repositories": [
+        {
+            "url": "https://github.com/xoob/serializer",
+            "type": "vcs"
+        }
+    ],
     "require": {
         "doctrine/orm": "2.4.*",
+        "jms/serializer": "dev-master",
         "jms/serializer-bundle": "dev-master",
         "dannykopping/spore": "dev-master"
     },
@@ -17,4 +24,6 @@
         "psr-4": {
             "Bl2\\": "src/"
         }
-    }}
+    }
+}
+

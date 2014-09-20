@@ -12,9 +12,10 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table(name="abstract_item", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"})})
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="itemType", type="string")
- * @ORM\DiscriminatorMap({"weapon" = "Weapon", "shield" = "Shield"})
- * @Serializer\Discriminator(field = "itemType", map = {"weapon": "Weapon", "shield": "Shield"})
+ * @ORM\DiscriminatorMap({"weapon" = "Bl2\Model\Weapon", "shield" = "Bl2\Model\Shield"})
+ * @Serializer\Discriminator(field = "itemtype", map = {"weapon": "Bl2\Model\Weapon", "shield": "Bl2\Model\Shield"})
  */
+//abstract class AbstractItem  {
 abstract class AbstractItem extends AbstractEntity {
 
     /**
@@ -64,21 +65,6 @@ abstract class AbstractItem extends AbstractEntity {
      */
     public function __construct(array $data = array()) {
         parent::__construct($data);
-    }
-
-    /**
-     * Gets the entity name for this entity. This is useful for the doctrine entity manager which will use the entity name.
-     */
-    public static function entityName() {
-        return get_called_class();
-    }
-
-    /**
-     * Gets the id.
-     * @return int the id
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**
