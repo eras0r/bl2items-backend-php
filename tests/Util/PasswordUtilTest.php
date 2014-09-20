@@ -1,14 +1,14 @@
 <?php
 
+namespace Bl2\Util;
+
 // TODO better way to include
 require_once '../../vendor/autoload.php';
 require_once '../../config.php';
 
 //require_once '/opt/lampp/htdocs/bl2items-backend/src/Util/PasswordUtil.php';
 
-use Bl2\Util\PasswordUtil;
-
-class PasswordUtilTest extends PHPUnit_Framework_TestCase {
+class PasswordUtilTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * The PasswordUtil under test.
