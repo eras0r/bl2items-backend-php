@@ -109,7 +109,13 @@ class UserService extends AbstractRestService {
         $user = $this->load($request, $id);
 
         $user->setUsername($properties["username"]);
-        // TODO set password if given
+        if (isset($properties["password"])) {
+            $hashedPassword = $this->passwordUtil->createHash($properties["password"]);
+            $user->setAlgorithm($hashedPassword->getAlgorithm());
+            $user->setIterations($hashedPassword->getIterations());
+            $user->setSalt($hashedPassword->getSalt());
+            $user->setPassword($hashedPassword->getHash());
+        }
 
         $this->assignUserRoles($user, $properties["roles"]);
 
