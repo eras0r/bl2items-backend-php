@@ -56,7 +56,7 @@ class HmacHashCalculator {
     }
 
     private function calculateHmacHash($data, $secret) {
-        $jsonData = !empty($data) ? json_encode($data) : "";
+        $jsonData = !empty($data) ? json_encode($data, JSON_UNESCAPED_SLASHES) : "";
         return hash_hmac("sha512", $this->getUrl() . ":" . $jsonData . ":" . $this->microTime, $secret);
     }
 
@@ -82,7 +82,16 @@ class HmacHashCalculator {
 
         $secret = $sessionToken->getSecret();
 
-        $generatedHmacHash = $this->calculateHmacHash($this->request->getBody(), $secret);
+        $data = $this->request->getBody();
+
+        // consider uploaded file metadata for hash calulation
+        foreach ($_FILES as $fileName => $file) {
+            $data[$fileName]["name"] = $file["name"];
+            $data[$fileName]["type"] = $file["type"];
+            $data[$fileName]["size"] = $file["size"];
+        }
+
+        $generatedHmacHash = $this->calculateHmacHash($data, $secret);
 
         if ($generatedHmacHash != $this->sentHmacHash) {
             throw new UnauthorizedException();
