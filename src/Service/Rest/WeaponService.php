@@ -2,6 +2,9 @@
 
 namespace Bl2\Service\Rest;
 
+use Bl2\Model\DamageType;
+use Bl2\Model\Manufacturer;
+use Bl2\Model\Rarity;
 use Bl2\Model\Weapon;
 use Bl2\Service\AbstractRestService;
 use Spore\ReST\Model\Request;
@@ -60,7 +63,17 @@ class WeaponService extends AbstractRestService {
     public function add(Request $request, Response $response) {
         // cast stdClass to array
         $properties = (array)$request->data;
-        return $this->create($request, $response, new Weapon($properties));
+
+        $weapon = new Weapon($properties);
+
+        // load referenced entity instances
+        $weapon->setRarity($this->getEntityManager()->find(Rarity::entityName(), $properties["rarity"]->id));
+        $weapon->setManufacturer($this->getEntityManager()->find(Manufacturer::entityName(),
+            $properties["manufacturer"]->id));
+        $weapon->setDamageType($this->getEntityManager()->find(DamageType::entityName(),
+            $properties["damageType"]->id));
+
+        return $this->create($request, $response, $weapon);
     }
 
     /**
