@@ -1,4 +1,7 @@
-# Borderlands 2 item database backend
+# Borderlands 2 items database backend
+
+[![PHP Dependency Status](https://www.versioneye.com/user/projects/5453bcf922b4fbef21000116/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5453bcf922b4fbef21000116)
+[![Stories in Ready](https://badge.waffle.io/eras0r/bl2items-backend.png?label=ready&title=Ready)](https://waffle.io/eras0r/bl2items-backend)
 
 This is a php REST JSON interface for the borderlands 2 items application.
 The data is stored in a database (default is [MySQL] (http://www.mysql.com/)) and then retrived by using the [doctrine ORM mapper] (http://www.doctrine-project.org/projects/orm.html)
