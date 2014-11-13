@@ -2,6 +2,7 @@
 
 namespace Bl2\Service\Rest;
 
+use Bl2\Dto\UserDto;
 use Bl2\Exception\BadRequestException;
 use Bl2\Exception\UnauthorizedException;
 use Bl2\Model\SessionToken;
@@ -11,9 +12,10 @@ use Bl2\Util\HashedPassword;
 use Bl2\Util\PasswordUtil;
 use Doctrine\ORM\EntityManager;
 use Spore\ReST\Model\Request;
+use Spore\ReST\Model\Response;
+use Spore\ReST\Model\Status;
 
 /**
- * /**
  * REST Service providing operations on the {@link SessionToken} entity.
  * @package Bl2\Service\Rest
  */
@@ -101,11 +103,54 @@ class SessionTokenService {
     }
 
     /**
+     * Retrieves the session with the given token
+     * @url /current-user/
+     * @verbs GET
+     *
+     * @param Request $request the HTTP request.
+     * @param Response $response the HTTP response.
+     *
+     * @return string
+     */
+    // TODO add auth annotation
+    public function get(Request $request, Response $response) {
+        // get the session token from the HTTP header
+        $sessionTokenId = $request->request()->headers("X_SESSION_TOKEN");
+
+        // check if SessionToken $this->sessionToken  exists
+        $sessionToken = $this->entityManager->getRepository('Bl2\Model\SessionToken')->findOneBy(array('sessionToken' => $sessionTokenId));
+
+        // user is not logged in
+        if ($sessionToken == null) {
+            // change HTTP response status and add location header for newly created objects
+            $response->status = Status::NO_CONTENT;
+            // retuning null will not respond with HTTP 204, that's why we need to return a value here
+            return "not logged in";
+        }
+
+        $user = new UserDto($sessionToken->getUser()->getUsername());
+
+        foreach ($sessionToken->getUser()->getRoles() as $role) {
+            $user->addRole($role->getRolename());
+        }
+
+        return $user;
+    }
+
+    /**
      * Used for CORS
      * @url /sessions(/:sessionToken)/
      * @verbs OPTIONS
      */
     public function options(Request $request) {
+    }
+
+    /**
+     * Used for CORS
+     * @url /current-user/
+     * @verbs OPTIONS
+     */
+    public function optionsCurrentUser(Request $request) {
     }
 
     /**
