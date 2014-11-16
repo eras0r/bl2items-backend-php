@@ -37,6 +37,7 @@ class SessionTokenService {
      * @verbs POST
      *
      * @param Request $request
+     * @param Response $response
      *
      * @throws \Bl2\Exception\UnauthorizedException
      * @throws \Exception
@@ -44,7 +45,7 @@ class SessionTokenService {
      * @throws \Exception
      * @return array
      */
-    public function login(Request $request) {
+    public function login(Request $request, Response $response) {
         try {
             // check HTTP request body parameters
             $this->checkRequestParameters($request->data);
@@ -56,13 +57,11 @@ class SessionTokenService {
 
             // create and save a new SessionToken and return it
             $sessionToken = $this->createAndSaveSessionToken($user, $password);
-            return $sessionToken;
+            return $this->createUserDto($sessionToken);
         } catch (BadRequestException $e) {
-            // TODO proper error handling by using HTTP 403
-            throw $e;
+            return $this->handleLoginError($response);
         } catch (UnauthorizedException $e) {
-            // TODO proper error handling by using HTTP 403
-            throw $e;
+            return $this->handleLoginError($response);
         }
     }
 
@@ -123,18 +122,12 @@ class SessionTokenService {
         // user is not logged in
         if ($sessionToken == null) {
             // change HTTP response status and add location header for newly created objects
-            $response->status = Status::NO_CONTENT;
+            $response->status = Status::NOT_FOUND;
             // retuning null will not respond with HTTP 204, that's why we need to return a value here
             return "not logged in";
         }
 
-        $user = new UserDto($sessionToken->getUser()->getUsername());
-
-        foreach ($sessionToken->getUser()->getRoles() as $role) {
-            $user->addRole($role->getRolename());
-        }
-
-        return $user;
+        return $this->createUserDto($sessionToken);
     }
 
     /**
@@ -151,6 +144,22 @@ class SessionTokenService {
      * @verbs OPTIONS
      */
     public function optionsCurrentUser(Request $request) {
+    }
+
+    /**
+     * Creates an returns a DTO object for the given sessionToken and the user it belongs to.
+     * @param $sessionToken the sessionToken to be used to determine the user.
+     *
+     * @return UserDto user DTO object
+     */
+    private function createUserDto($sessionToken) {
+        $user = new UserDto($sessionToken->getSessionToken(), $sessionToken->getUser()->getUsername());
+
+        foreach ($sessionToken->getUser()->getRoles() as $role) {
+            $user->addRole($role->getRolename());
+        }
+
+        return $user;
     }
 
     /**
@@ -246,4 +255,16 @@ class SessionTokenService {
 
         return $sessionToken;
     }
+
+    /**
+     * @param Response $response
+     *
+     * @return string
+     */
+    public function handleLoginError(Response $response) {
+// return http 404 (as the user was not found)
+        // returning 401 would be catched angular-auths global error handler
+        $response->status = Status::NOT_FOUND;
+        return "invalid credentials";
+}
 }

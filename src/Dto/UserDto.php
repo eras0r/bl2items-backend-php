@@ -8,12 +8,20 @@
 
 namespace Bl2\Dto;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * DTO object representing a user which can be used to transmit to the client.
  * This object is used for example for the current session.
  * @package Bl2\Dto
  */
 class UserDto {
+
+    /**
+     * @Serializer\SerializedName("sessionToken")
+     * @var string the user's session token
+     */
+    private $sessionToken;
 
     /**
      * @var
@@ -25,7 +33,8 @@ class UserDto {
      */
     private $roles;
 
-    function __construct($username) {
+    function __construct($sessionToken, $username) {
+        $this->sessionToken = $sessionToken;
         $this->username = $username;
         $this->roles = array();
     }
@@ -46,6 +55,20 @@ class UserDto {
      */
     public function getRoles() {
         return $this->roles;
+    }
+
+    /**
+     * @param string $sessionToken
+     */
+    public function setSessionToken($sessionToken) {
+        $this->sessionToken = $sessionToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionToken() {
+        return $this->sessionToken;
     }
 
     /**
