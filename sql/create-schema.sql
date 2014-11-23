@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `iterations` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 --
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `session_token` (
   `secret` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_844A19EDA76ED395` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
 ----- TODO rename constraints
 --
