@@ -59,8 +59,8 @@ abstract class AbstractItem extends AbstractEntity {
     protected $additionalText;
 
     /**
-     * @ORM\Column(type="text")
-     * @Serializer\SerializedName("string")
+     * @ORM\Column(type="string")
+     * @Serializer\SerializedName("gibbedCode")
      * @var string
      **/
     protected $gibbedCode;
