@@ -59,6 +59,13 @@ abstract class AbstractItem extends AbstractEntity {
     protected $additionalText;
 
     /**
+     * @ORM\Column(type="text")
+     * @Serializer\SerializedName("string")
+     * @var string
+     **/
+    protected $gibbedCode;
+
+    /**
      * Create a new entity object by using the given array to initialize the new objects properties.
      *
      * @param array $data array holding the new entity objects property (key = property name, value = property value)
@@ -151,6 +158,20 @@ abstract class AbstractItem extends AbstractEntity {
         return $this->uniqueText;
     }
 
+    /**
+     * @param string $gibbedCode
+     */
+    public function setGibbedCode($gibbedCode) {
+        $this->gibbedCode = $gibbedCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGibbedCode() {
+        return $this->gibbedCode;
+    }
+
     protected function doValidation() {
         parent::doValidation();
 
@@ -165,6 +186,9 @@ abstract class AbstractItem extends AbstractEntity {
         }
         if ($this->rarity == null) {
             $this->addValidationError("rarity", "Rarity is required");
+        }
+        if ($this->gibbedCode == null) {
+            $this->addValidationError("gibbedCode", "Gibbed Code is required");
         }
     }
 }
