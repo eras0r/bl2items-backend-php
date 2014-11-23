@@ -74,8 +74,8 @@ class DamageTypeService extends AbstractRestService {
      * @return DamageType the updated damage type
      */
     public function update(Request $request) {
-        $id = $request->params['id'];
-        return $this->save($request, $id);
+        $properties = (array)$request->data;
+        return $this->save(new DamageType($properties));
     }
 
     /**

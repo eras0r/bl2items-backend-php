@@ -74,8 +74,8 @@ class ShieldService extends AbstractRestService {
      * @return Shield the updated shield
      */
     public function update(Request $request) {
-        $id = $request->params['id'];
-        return $this->save($request, $id);
+        $properties = (array)$request->data;
+        return $this->save(new Shield($properties));
     }
 
     /**

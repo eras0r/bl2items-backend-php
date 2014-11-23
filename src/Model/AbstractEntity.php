@@ -56,7 +56,7 @@ abstract class AbstractEntity {
      */
     public function applyPropertiesFromJson($jsonData) {
         foreach ($jsonData as $key => $val) {
-            if (property_exists(get_class($this), $key) && $key != "id") {
+            if (property_exists(get_class($this), $key)) {
                 $this->$key = $val;
             }
         }

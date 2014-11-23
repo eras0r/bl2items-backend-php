@@ -74,8 +74,8 @@ class ManufacturerService extends AbstractRestService {
      * @return Manufacturer the updated manufacturer
      */
     public function update(Request $request) {
-        $id = $request->params['id'];
-        return $this->save($request, $id);
+        $properties = (array)$request->data;
+        return $this->save(new Manufacturer($properties));
     }
 
     /**

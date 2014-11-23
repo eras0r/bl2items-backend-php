@@ -88,22 +88,11 @@ abstract class AbstractRestService {
     /**
      * Saves the given entity object.
      *
-     * @param Request $request the HTTP request
-     * @param int $id the id of the entity object to be saved
+     * @param AbstractEntity $entityObject the entity object to be saved
      *
      * @return AbstractEntity the updated resource
      */
-    public function save(Request $request, $id) {
-        // cast stdClass to array
-        $properties = (array)$request->data;
-
-        // load the entity object
-        /** @var AbstractEntity $entityObject */
-        $entityObject = $this->load($request, $id);
-
-        // apply properties from JSON data
-        $entityObject->applyPropertiesFromJson($properties);
-
+    public function save($entityObject) {
         return $this->persistEntityObject($entityObject);
     }
 
@@ -210,7 +199,7 @@ abstract class AbstractRestService {
         $entityObject->validate();
 
         try {
-            $this->getEntityManager()->persist($entityObject);
+            $this->getEntityManager()->merge($entityObject);
             $this->getEntityManager()->flush();
             return $entityObject;
         } catch (DBALException $e) {

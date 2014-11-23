@@ -87,8 +87,18 @@ class WeaponService extends AbstractRestService {
      * @return Weapon the updated weapon
      */
     public function update(Request $request) {
-        $id = $request->params['id'];
-        return $this->save($request, $id);
+        $properties = (array)$request->data;
+
+        $weapon = new Weapon($properties);
+
+        // load referenced entity instances
+        $weapon->setRarity($this->getEntityManager()->find(Rarity::entityName(), $properties["rarity"]->id));
+        $weapon->setManufacturer($this->getEntityManager()->find(Manufacturer::entityName(),
+            $properties["manufacturer"]->id));
+        $weapon->setDamageType($this->getEntityManager()->find(DamageType::entityName(),
+            $properties["damageType"]->id));
+
+        return $this->save($weapon);
     }
 
     /**
