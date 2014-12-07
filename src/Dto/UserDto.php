@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eras0r
- * Date: 10/4/14
- * Time: 1:10 PM
- */
 
 namespace Bl2\Dto;
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eras0r
- * Date: 9/23/14
- * Time: 9:23 PM
- */
 
 namespace Bl2\Util\Upload;
 
