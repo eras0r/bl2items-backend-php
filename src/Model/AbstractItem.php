@@ -15,7 +15,6 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\DiscriminatorMap({"weapon" = "Bl2\Model\Weapon", "shield" = "Bl2\Model\Shield"})
  * @Serializer\Discriminator(field = "itemtype", map = {"weapon": "Bl2\Model\Weapon", "shield": "Bl2\Model\Shield"})
  */
-//abstract class AbstractItem  {
 abstract class AbstractItem extends AbstractEntity {
 
     /**
