@@ -111,6 +111,18 @@ class CharacterService extends AbstractRestService {
     }
 
     /**
+     * HTTP OPTIONS request used for CORS.
+     * @url /characters(/:id)/skills/
+     * @verbs OPTIONS
+     *
+     * @param Request $request the HTTP request
+     */
+    // TODO find a better solution than copying the whole method
+    public function skillsOptions(Request $request) {
+        parent::options($request);
+    }
+
+    /**
      * Gets skills for the character with the given id.
      * @url /characters/:id/skills/
      * @verbs GET
@@ -120,8 +132,8 @@ class CharacterService extends AbstractRestService {
      * @return array
      */
     public function getSkills(Request $request) {
-        $charcater =  parent::load($request, $request->params['id']);
-        return $charcater->getSkills();
+        $character =  parent::load($request, $request->params['id']);
+        return $character->getSkillTrees();
     }
 
     /**

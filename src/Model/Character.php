@@ -27,10 +27,11 @@ class Character extends AbstractEntity {
     protected $classRequirement;
 
     /**
-     * @ORM\OneToMany(targetEntity="Skill", mappedBy="character")
+     * @ORM\OneToMany(targetEntity="SkillTree", mappedBy="character")
+     * @ORM\OrderBy({"order" = "ASC"})
      * @Serializer\Exclude
      **/
-    private $skills;
+    private $skillTrees;
 
     /**
      * Creates a new character class by initializing is properties by using the values given in the associative array.
@@ -70,17 +71,17 @@ class Character extends AbstractEntity {
     }
 
     /**
-     * @param mixed $skills
+     * @param mixed $skillTrees
      */
-    public function setSkills($skills) {
-        $this->skills = $skills;
+    public function setSkillTrees($skillTrees) {
+        $this->skillTrees = $skillTrees;
     }
 
     /**
      * @return mixed
      */
-    public function getSkills() {
-        return $this->skills;
+    public function getSkillTrees() {
+        return $this->skillTrees;
     }
 
     protected function doValidation() {

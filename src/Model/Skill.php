@@ -13,14 +13,6 @@ use JMS\Serializer\Annotation as Serializer;
 class Skill extends AbstractEntity {
 
     /**
-     * @ORM\ManyToOne(targetEntity="Character", inversedBy="skills", fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="characterId", referencedColumnName="id")
-     * @Serializer\Exclude
-     * @var Character
-     **/
-    protected $character;
-
-    /**
      * @ORM\Column(type="string")
      * @var string
      **/
@@ -45,26 +37,19 @@ class Skill extends AbstractEntity {
     protected $levels;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @Serializer\SerializedName("killSkill")
+     * @var boolean
+     **/
+    protected $killSkill;
+
+    /**
      * Creates a new character class by initializing is properties by using the values given in the associative array.
      *
      * @param array $data associative array holding the properties for the character class.
      */
     public function __construct(array $data) {
         parent::__construct($data);
-    }
-
-    /**
-     * @param \Bl2\Model\Character $character
-     */
-    public function setCharacter($character) {
-        $this->character = $character;
-    }
-
-    /**
-     * @return \Bl2\Model\Character
-     */
-    public function getCharacter() {
-        return $this->character;
     }
 
     /**
@@ -121,6 +106,20 @@ class Skill extends AbstractEntity {
      */
     public function getText() {
         return $this->text;
+    }
+
+    /**
+     * @param boolean $killSkill
+     */
+    public function setKillSkill($killSkill) {
+        $this->killSkill = $killSkill;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getKillSkill() {
+        return $this->killSkill;
     }
 
     protected function doValidation() {
