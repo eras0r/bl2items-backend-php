@@ -155,7 +155,69 @@ CREATE TABLE IF NOT EXISTS `session_token` (
   KEY `IDX_844A19EDA76ED395` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
 
------ TODO rename constraints
+--
+-- Table structure for table `character`
+--
+CREATE TABLE IF NOT EXISTS `character` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `classRequirement` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_name` (`name`),
+  UNIQUE KEY `unique_classRequirement` (`classRequirement`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `skill_tier`
+--
+CREATE TABLE IF NOT EXISTS `skill_tier` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `skill_tree_id` bigint(20) NOT NULL,
+  `left_skill_id` bigint(20) DEFAULT NULL,
+  `middle_skill_id` bigint(20) DEFAULT NULL,
+  `right_skill_id` bigint(20) DEFAULT NULL,
+  `order` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_name` (`skill_tree_id`,`order`),
+  UNIQUE KEY `UNIQ_63DF0B38F143D72A` (`left_skill_id`),
+  UNIQUE KEY `UNIQ_63DF0B385E3AF899` (`middle_skill_id`),
+  UNIQUE KEY `UNIQ_63DF0B3887EF990D` (`right_skill_id`),
+  KEY `IDX_63DF0B381D7EFA8B` (`skill_tree_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `skill`
+--
+CREATE TABLE IF NOT EXISTS `skill` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `levels` int(11) NOT NULL,
+  `killSkill` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `skill_tree`
+--
+CREATE TABLE IF NOT EXISTS `skill_tree` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `character_id` bigint(20) NOT NULL,
+  `order` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `color` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `borderColor` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_skill_tree` (`character_id`,`color`),
+  KEY `IDX_F07FC26E1136BE75` (`character_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
+
+-- TODO rename constraints
+--
+-- Constraints for table `abstract_item`
+--
 --
 -- Constraints for table `abstract_item`
 --
@@ -176,11 +238,26 @@ ALTER TABLE `shield`
   ADD CONSTRAINT `FK_1E93D2E8BF396750` FOREIGN KEY (`id`) REFERENCES `abstract_item` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `skill_tier`
+--
+ALTER TABLE `skill_tier`
+  ADD CONSTRAINT `FK_63DF0B3887EF990D` FOREIGN KEY (`right_skill_id`) REFERENCES `skill` (`id`),
+  ADD CONSTRAINT `FK_63DF0B381D7EFA8B` FOREIGN KEY (`skill_tree_id`) REFERENCES `skill_tree` (`id`),
+  ADD CONSTRAINT `FK_63DF0B385E3AF899` FOREIGN KEY (`middle_skill_id`) REFERENCES `skill` (`id`),
+  ADD CONSTRAINT `FK_63DF0B38F143D72A` FOREIGN KEY (`left_skill_id`) REFERENCES `skill` (`id`);
+
+--
+-- Constraints for table `skill_tree`
+--
+ALTER TABLE `skill_tree`
+  ADD CONSTRAINT `FK_F07FC26E1136BE75` FOREIGN KEY (`character_id`) REFERENCES `character` (`id`);
+
+--
 -- Constraints for table `users_roles`
 --
 ALTER TABLE `users_roles`
-  ADD CONSTRAINT `FK_51498A8ED60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-  ADD CONSTRAINT `FK_51498A8EA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_51498A8EA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_51498A8ED60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
 
 --
 -- Constraints for table `weapon`
