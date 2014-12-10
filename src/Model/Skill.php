@@ -19,7 +19,7 @@ class Skill extends AbstractEntity {
     protected $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      * @var string
      **/
     protected $text;
