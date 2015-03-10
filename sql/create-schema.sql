@@ -57,8 +57,9 @@ CREATE TABLE IF NOT EXISTS `abstract_item` (
   `uniqueText` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `additionalText` longtext COLLATE utf8_unicode_ci NOT NULL,
   `itemType` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `gibbedCode` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_name` (`name`),
+  UNIQUE KEY `unique_name` (`gibbedCode`),
   KEY `IDX_ECFF561FA23B42D` (`manufacturer_id`),
   KEY `IDX_ECFF561FF3747573` (`rarity_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;
