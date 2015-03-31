@@ -27,7 +27,13 @@ $sporeConfig = array(
     "include-examples" => false,
     "debug" => false, // debug false, otherwise exception handling won't work properly
     "serializers" => array(
-        "application/json" => '\Bl2\Util\JsonSerializer'
+        "application/json" => '\Bl2\Util\JsonSerializer',
+        "application/json; charset=UTF-8" => '\Bl2\Util\JsonSerializer',
+    ),
+    "deserializers" => array(
+        "application/json" => 'Spore\ReST\Data\Deserializer\JSONDeserializer',
+        // firefox send request with the charset
+        "application/json; charset=UTF-8" => 'Spore\ReST\Data\Deserializer\JSONDeserializer',
     )
 );
 
