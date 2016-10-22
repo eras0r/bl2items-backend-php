@@ -13,7 +13,6 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="itemType", type="string")
  * @ORM\DiscriminatorMap({"weapon" = "Bl2\Model\Weapon", "shield" = "Bl2\Model\Shield"})
- * @Serializer\Discriminator(field = "itemtype", map = {"weapon": "Bl2\Model\Weapon", "shield": "Bl2\Model\Shield"})
  */
 abstract class AbstractItem extends AbstractEntity {
 
@@ -170,6 +169,11 @@ abstract class AbstractItem extends AbstractEntity {
     public function getGibbedCode() {
         return $this->gibbedCode;
     }
+
+    /**
+     * @Serializer\VirtualProperty
+     */
+    public abstract function getItemtype();
 
     protected function doValidation() {
         parent::doValidation();

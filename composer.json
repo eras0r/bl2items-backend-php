@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "doctrine/orm": "2.4.*",
-        "jms/serializer": "dev-master",
-        "jms/serializer-bundle": "dev-master",
+        "doctrine/orm": "2.4.5",
+        "jms/serializer": "1.1.0",
+        "jms/serializer-bundle": "1.1.0",
         "dannykopping/spore": "dev-master",
         "codeguy/upload": "dev-master"
     },
@@ -27,4 +27,3 @@
         }
     }
 }
-

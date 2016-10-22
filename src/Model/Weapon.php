@@ -260,4 +260,9 @@ class Weapon extends AbstractItem {
                 . $this->damageType->getName() . "'");
         }
     }
+
+    public function getItemtype() {
+        return "weapon";
+    }
+
 }

@@ -308,4 +308,9 @@ class Shield extends AbstractItem {
             $this->addValidationError("rechargeDelay", "recharge delay is required");
         }
     }
+
+    public function getItemtype() {
+        return "shield";
+    }
+
 }
